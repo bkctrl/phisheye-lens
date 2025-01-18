@@ -16,13 +16,14 @@ import Image from "next/image";
 
 // Define the props type
 interface HomeScreenProps {
-  goToChat: () => void; // Function type
+  goToChat: () => void;
+  goToEmail: () => void;
 }
 
-export default function HomeScreen({ goToChat }: HomeScreenProps) {
+export default function HomeScreen({ goToChat, goToEmail }: HomeScreenProps) {
   const appIcons = [
     { name: "messages", icon: <FaMessage size={40} />, action: goToChat }, // Navigate to Chat
-    { name: "email", icon: <MdEmail size={50} /> },
+    { name: "email", icon: <MdEmail size={50} />, action: goToEmail },
     { name: "browser", icon: <FaChrome size={45} /> },
     { name: "camera", icon: <FaCamera size={45} /> },
     { name: "gallery", icon: <FaImage size={45} /> },
