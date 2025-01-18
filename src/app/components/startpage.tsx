@@ -52,13 +52,13 @@ export default function StartPage() {
         {/* Buttons */}
         <div className="flex justify-center space-x-4">
           <button
-            className="bg-[#24cf79] text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition text-2xl"
+            className="bg-light-cyan text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition text-2xl"
             onClick={navigateToGame} // Navigate on click
           >
             Start
           </button>
           <button
-            className="bg-[#FF3B30] text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition text-2xl"
+            className="bg-off-grey text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition text-2xl"
             onClick={openModal}
           >
             How to Play
