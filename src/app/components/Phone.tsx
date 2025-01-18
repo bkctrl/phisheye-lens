@@ -14,7 +14,7 @@ const Phone = () => {
   const goToEmail: () => void = () => setCurrentScreen("email"); // Function to navigate to the email screen
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[rgb(10,37,64)]">
+    <div className="flex items-center justify-center mx-auto w-1/2 min-h-screen bg-[rgb(10,37,64)]">
       {/* Phone Frame */}
       <AndroidTabMockup screenWidth={900} isLandscape>
         <div className="relative w-full h-full bg-gray-200">
