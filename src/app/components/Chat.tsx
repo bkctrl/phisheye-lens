@@ -34,7 +34,7 @@ export default function Chat({ goToHome }: ChatProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-100">
+    <div className="flex flex-col h-full bg-[#134B70]">
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-blue-500 text-white">
         <button onClick={goToHome} className="text-white">
