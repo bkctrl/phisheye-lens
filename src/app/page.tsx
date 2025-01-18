@@ -1,13 +1,11 @@
 import Image from "next/image";
-import Intro from "./components/Intro";
+import Intro from "@/app/components/Intro";
+import Phone from "@/app/components/Phone";
 
 export default function Home() {
   return (
     <div>
-      <Intro/>
-      <a>
-        Hi
-      </a>
+      <Phone/>
     </div>
   );
 }
