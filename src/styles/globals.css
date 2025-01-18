@@ -10,9 +10,10 @@
   --off-grey: #CACFD6;
   --dark-green: #517664;
   --light-cyan: #9FD8CB;
+  --deep-blue: #0A2540;
 }
 
 body {
-  background: var(--off-grey);
+  background: var(--deep-blue);
   font-family: Arial, Helvetica, sans-serif;
 }
