@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const Notepad: React.FC = () => {
   const [notes, setNotes] = useState<string>('');
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: window.innerWidth - 250, y: 50 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
@@ -50,7 +50,7 @@ const Notepad: React.FC = () => {
       className="min-h-screen flex items-center justify-center"
     >
       <div
-        className="absolute"
+        className="absolute slide-in-from-right"
         style={{
           top: `${position.y}px`,
           left: `${position.x}px`,
@@ -58,7 +58,7 @@ const Notepad: React.FC = () => {
         }}
         onMouseDown={handleMouseDown}
       >
-        <div className="w-full max-w-2xl bg-yellow-200 shadow-lg rounded-lg">
+        <div className="w-full max-w-2xl bg-yellow-200 shadow-xl rounded-md">
           <h1 className="text-md font-bold py-2 text-center text-gray-800">
             My Notes
           </h1>
