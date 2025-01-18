@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChatBubble } from "../ui/chatBubble";
+import { globals } from "@/api/api";
 // import { ChatBubble } from "./ChatBubble";
 
 interface ChatProps {
