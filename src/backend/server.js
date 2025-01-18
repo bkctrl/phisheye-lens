@@ -51,17 +51,20 @@ const communications = {
                 {
                     sender: { name: "Mike", phone_number: "+123456789" },
                     recipient: { name: "Alice Smith", phone_number: "+987654321" },
-                    message: "Hey Alice, don’t forget to send me the login details for the shared account. Thanks!"
+                    message: "Hey Alice, don’t forget to send me the login details for the shared account. Thanks!",
+                    senderType: "AI"
                 },
                 {
                     sender: { name: "Alice Smith", phone_number: "+987654321" },
                     recipient: { name: "Mike", phone_number: "+123456789" },
-                    message: "Sure, Mike! I'll send them over in a moment."
+                    message: "Sure, Mike! I'll send them over in a moment.",
+                    senderType: "user"
                 },
                 {
                     sender: { name: "Mike", phone_number: "+123456789" },
                     recipient: { name: "Alice Smith", phone_number: "+987654321" },
-                    message: "Great, thanks!"
+                    message: "Great, thanks!",
+                    senderType: "AI"
                 }
             ]
         }
