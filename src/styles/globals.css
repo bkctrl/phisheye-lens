@@ -3,19 +3,26 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --simple-dark: #322214;
+  --simple-light: #F6F8FF;
+  --beige: #F5DBCB;
+  --light-grey: #CACFD6;
+  --off-grey: #CACFD6;
+  --dark-green: #517664;
+  --light-cyan: #9FD8CB;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@font-face {
+  font-family: 'CustomFont';
+  src: url('path/to/font.woff2') format('woff2'),
+       url('path/to/font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
+
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: var(--off-grey);
   font-family: Arial, Helvetica, sans-serif;
 }
