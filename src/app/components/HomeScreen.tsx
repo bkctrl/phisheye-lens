@@ -30,9 +30,9 @@ export default function HomeScreen({ goToChat }: HomeScreenProps) {
     { name: "calculator", icon: <FaCalculator size={45} /> },
     { name: "settings", icon: <FaCog size={45} /> },
     { name: "store", icon: <FaGooglePlay size={45} /> },
-    { name: "google", icon: <FaGoogle size={45} /> },
     { name: "netflix", icon: <RiNetflixFill size={45} /> },
     { name: "clock", icon: <FaClock size={45} /> },
+    { name: "rbc", icon: <Image src="/assets/images/rbc-icon.png" width={65} height={65} alt="rbc" /> },
   ];
 
   return (
@@ -43,14 +43,15 @@ export default function HomeScreen({ goToChat }: HomeScreenProps) {
         layout="fill"
         objectFit="cover"
         alt="tablet background"
-        className="absolute"
+        className="absolute z-0"
       />
       {/* App Icons Grid */}
-      <div className="grid grid-cols-4 gap-8 gap-x-14 items-center justify-items-center content-center z-10">
+      <div className="grid grid-cols-4 gap-12 gap-x-16 items-center justify-items-center content-center z-10">
         {appIcons.map((item, index) => (
           <div
             key={index}
-            className="flex items-center justify-center w-16 h-16 bg-gray-200 rounded-2xl shadow-xl hover:-translate-y-2 duration-300 cursor-pointer"
+            className="flex items-center justify-center w-16 h-16 bg-gray-200 overflow-hidden rounded-2xl shadow-xl
+            transition-transform transform hover:scale-110"
             onClick={item.action} // Trigger navigation when clicked
           >
             {item.icon}
