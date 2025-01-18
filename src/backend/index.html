@@ -1,0 +1,391 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Password Guessing Game</title>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              height: 100vh;
+              background-color: #f4f4f9;
+          }
+          .sidebar {
+              width: 300px;
+              background: #333;
+              color: #fff;
+              padding: 20px;
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+          }
+          .sidebar h2 {
+              margin-bottom: 10px;
+          }
+          .guess-history {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              flex: 1;
+              overflow-y: auto;
+          }
+          .guess-history li {
+              margin-bottom: 10px;
+              padding: 10px;
+              background: #444;
+              border-radius: 5px;
+          }
+          .content {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+          }
+          .tab-bar {
+              display: flex;
+              gap: 10px;
+              padding: 10px;
+              background-color: #f4f4f9;
+              border-bottom: 1px solid #ccc;
+          }
+          .tab-bar button {
+              padding: 10px 15px;
+              font-size: 16px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+          }
+          .tab-bar button.active {
+              background-color: #0056b3;
+          }
+          .tab-bar button:hover {
+              background-color: #0056b3;
+          }
+          .tab-content {
+              flex: 1;
+              padding: 20px;
+              overflow-y: auto;
+          }
+          .interactive-chat, .emails {
+              display: none;
+          }
+          .chat-window {
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              margin-bottom: 10px;
+          }
+          .chat-message {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              margin-bottom: 10px;
+          }
+          .chat-message.user {
+              align-items: flex-end;
+          }
+          .chat-message .sender-name {
+              font-size: 12px;
+              font-weight: bold;
+              margin-bottom: 2px;
+              color: #555;
+          }
+          .chat-bubble {
+              max-width: 70%;
+              padding: 10px;
+              border-radius: 10px;
+              word-wrap: break-word;
+              font-size: 14px;
+          }
+          .chat-bubble.user {
+              background-color: #007bff;
+              color: white;
+              align-self: flex-end;
+          }
+          .chat-bubble.llm {
+              background-color: #f1f1f1;
+              color: black;
+              align-self: flex-start;
+          }
+          .emails {
+              font-size: 14px;
+          }
+          .emails h3 {
+              font-size: 16px;
+              margin-bottom: 5px;
+          }
+          .character-description {
+            display: none;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+      </style>
+  </head>
+  <body>
+      <div class="sidebar">
+          <h2>Previous Guesses</h2>
+          <ul id="guess-history" class="guess-history"></ul>
+          <div id="response" class="response"></div>
+          <p id="total-guesses">Total Guesses: 0</p>
+      </div>
+      <div class="content">
+          <div class="tab-bar">
+              <button id="messages-tab" class="active">Messages</button>
+              <button id="emails-tab">Emails</button>
+              <button id="description-tab">Character Description</button>
+          </div>
+          <div class="tab-content">
+              <div id="description-content" class="character-description">
+                <h2>About the Character</h2>
+                <p id="character-description-text">Loading character description...</p>
+              </div>
+              <div id="messages-content" class="interactive-chat">
+                  <div id="chat-window" class="chat-window"></div>
+                  <div class="input-container">
+                      <input type="text" id="chat-input" placeholder="Type your message..." />
+                      <button id="send-message">Send</button>
+                  </div>
+              </div>
+              <div id="emails-content" class="emails">
+                  <div id="emails"></div>
+              </div>
+          </div>
+          <div class="guess-container" style="padding: 20px;">
+              <h2>Guess the Password</h2>
+              <input type="text" id="guess-input" placeholder="Enter your guess" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+              <button id="submit-guess">Submit Guess</button>
+          </div>
+      </div>
+
+      <script>
+          const apiBase = 'http://localhost:3000';
+
+          // DOM Elements
+          const guessHistory = document.getElementById('guess-history');
+          const responseDiv = document.getElementById('response');
+          const messagesTab = document.getElementById('messages-tab');
+          const emailsTab = document.getElementById('emails-tab');
+          const messagesContent = document.getElementById('messages-content');
+          const emailsContent = document.getElementById('emails-content');
+          const chatWindow = document.getElementById('chat-window');
+          const chatInput = document.getElementById('chat-input');
+          const sendMessageButton = document.getElementById('send-message');
+          const emailsDiv = document.getElementById('emails');
+          const guessInput = document.getElementById('guess-input');
+          const submitGuessButton = document.getElementById('submit-guess');
+          const characterDescriptionText = document.getElementById
+          ('character-description-text');
+          const descriptionTab = document.getElementById('description-tab');
+          const descriptionContent = document.getElementById('description-content');
+
+          let totalGuessCount = 0; // Tracks the total number of guesses across all games
+          let currentGameGuessCount = 0; // Tracks guesses for the current game
+
+          // Tab Switching
+          function hideAllTabs() {
+            messagesContent.style.display = 'none';
+            emailsContent.style.display = 'none';
+            descriptionContent.style.display = 'none';
+        
+            messagesTab.classList.remove('active');
+            emailsTab.classList.remove('active');
+            descriptionTab.classList.remove('active');
+        }
+        
+        messagesTab.addEventListener('click', () => {
+            hideAllTabs();
+            messagesContent.style.display = 'block';
+            messagesTab.classList.add('active');
+        });
+        
+        emailsTab.addEventListener('click', () => {
+            hideAllTabs();
+            emailsContent.style.display = 'block';
+            emailsTab.classList.add('active');
+        });
+        
+        descriptionTab.addEventListener('click', () => {
+            hideAllTabs();
+            descriptionContent.style.display = 'block';
+            descriptionTab.classList.add('active');
+        });
+
+          async function fetchCharacterDescription() {
+            try {
+                const response = await fetch(`${apiBase}/character-description`);
+                const description = await response.text();
+                characterDescriptionText.textContent = description;
+            } catch (error) {
+                console.error("Error fetching character description:", error);
+                characterDescriptionText.textContent = "Failed to load character description.";
+            }
+        }
+
+          // Fetch Communications
+          async function fetchCommunications() {
+              try {
+                  const response = await fetch(`${apiBase}/communications`);
+                  const data = await response.json();
+
+                  console.log("Data received from API:", data);
+
+                  // Access nested communications array
+                  const communications = data.communications.communications;
+
+                  if (!Array.isArray(communications)) {
+                      throw new Error("Invalid communications format: Expected an array.");
+                  }
+
+                  // Filter emails and text messages
+                  const emails = communications.filter(comm => comm.type === "email");
+                  const textMessages = communications.filter(comm => comm.type === "text_message");
+
+                  // Populate Emails
+                  emailsDiv.innerHTML = emails.map(email => `
+                      <div>
+                          <h3>Subject: ${email.thread[0].subject}</h3>
+                          <div>
+                              ${email.thread.map(mail => `
+                                  <div style="margin-bottom: 10px;">
+                                      <p><strong>${mail.sender.name} (${mail.sender.email_address}):</strong></p>
+                                      <p>${mail.body.replace(/\n/g, '<br>')}</p>
+                                  </div>
+                              `).join('<hr>')}
+                          </div>
+                      </div>
+                  `).join('<hr>');
+
+                  // Populate Text Messages
+                  chatWindow.innerHTML = textMessages.map(message => `
+                      <div>
+                          ${message.thread.map(text => `
+                              <div class="chat-message ${text.sender.name === "Alice Smith" ? 'user' : 'llm'}">
+                                  <div class="sender-name">${text.sender.name}</div>
+                                  <div class="chat-bubble ${text.sender.name === "Alice Smith" ? 'user' : 'llm'}">
+                                      ${text.message}
+                                  </div>
+                              </div>
+                          `).join('')}
+                      </div>
+                  `).join('');
+              } catch (error) {
+                  console.error("Error fetching communications:", error);
+              }
+          }
+
+          async function startNewGame() {
+            try {
+                const response = await fetch(`${apiBase}/new-game`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+        
+                // Reset UI and game state
+                guessInput.disabled = false;
+                submitGuessButton.disabled = false;
+                guessInput.value = '';
+                responseDiv.textContent = '';
+
+                currentGameGuessCount = 0;
+                
+                // Clear current game guesses
+                guessHistory.innerHTML += `<li><em>New game started!</em></li>`;
+                
+                // Reset tab selection to the default (Messages)
+                hideAllTabs();
+                messagesContent.style.display = 'block';
+                messagesTab.classList.add('active');
+            } catch (error) {
+                console.error('Error starting a new game:', error);
+            }
+        }
+        
+        
+
+          // Submit Password Guess
+          async function submitGuess() {
+            const guess = guessInput.value.trim();
+            if (!guess) return;
+        
+            // Increment guess counters
+            currentGameGuessCount++;
+            totalGuessCount++;
+            guessHistory.innerHTML += `<li>${guess}</li>`;
+            guessInput.value = ''; // Clear the input field after each guess
+        
+            try {
+                const response = await fetch(`${apiBase}/guess`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guess })
+                });
+                const data = await response.json();
+        
+                responseDiv.textContent = data.message;
+                responseDiv.style.color = data.success ? 'green' : 'red';
+                document.getElementById('total-guesses').textContent = `Total Guesses: ${totalGuessCount}`;
+                if (data.success) {
+                    // Display results in the sidebar
+                    guessHistory.innerHTML += `<li><strong>Correct!</strong> Took ${currentGameGuessCount} guesses.</li>`;
+                    
+                    // Reset for a new game
+                    await startNewGame();
+                }
+            } catch (error) {
+                console.error('Error submitting guess:', error);
+            }
+        }
+        
+
+          // Send Message
+          async function sendMessage() {
+              const message = chatInput.value.trim();
+              if (!message) return;
+
+              chatWindow.innerHTML += `<div class="chat-message user">
+                  <div class="sender-name">Alice Smith</div>
+                  <div class="chat-bubble user">${message}</div>
+              </div>`;
+              chatInput.value = '';
+
+              try {
+                  const response = await fetch(`${apiBase}/chat`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ message })
+                  });
+                  const data = await response.json();
+
+                  chatWindow.innerHTML += `<div class="chat-message llm">
+                      <div class="sender-name">Mike</div>
+                      <div class="chat-bubble llm">${data.response}</div>
+                  </div>`;
+                  chatWindow.scrollTop = chatWindow.scrollHeight;
+              } catch (error) {
+                  console.error('Error sending message:', error);
+              }
+          }
+
+          // Event Listeners
+          submitGuessButton.addEventListener('click', submitGuess);
+          sendMessageButton.addEventListener('click', sendMessage);
+          chatInput.addEventListener('keypress', event => {
+              if (event.key === 'Enter') sendMessage();
+          });
+
+          // Initialize
+          fetchCharacterDescription();
+          fetchCommunications();
+      </script>
+  </body>
+  </html>
