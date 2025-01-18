@@ -18,7 +18,12 @@ const Phone = () => {
   return (
     <div className="flex items-center justify-center mx-auto w-1/2 min-h-screen bg-[rgb(10,37,64)]">
       {/* Phone Frame */}
-      <AndroidTabMockup screenWidth={900} isLandscape>
+      <AndroidTabMockup 
+        screenWidth={900}
+        isLandscape
+        statusbarColor={"#2D1E24"}
+        transparentNavBar
+      >
         <div className="relative w-full h-full bg-gray-200">
           {currentScreen === "home" && <HomeScreen goToChat={goToChat} goToEmail={goToEmail} goToRBC={goToRBC} />}
           {currentScreen === "chat" && <Chat goToHome={goToHome} />}

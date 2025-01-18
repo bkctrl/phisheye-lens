@@ -23,18 +23,22 @@ interface HomeScreenProps {
 
 export default function HomeScreen({ goToChat, goToEmail, goToRBC }: HomeScreenProps) {
   const appIcons = [
-    { name: "messages", icon: <FaMessage size={40} />, action: goToChat }, // Navigate to Chat
-    { name: "email", icon: <MdEmail size={50} />, action: goToEmail },
-    { name: "browser", icon: <FaChrome size={45} /> },
-    { name: "camera", icon: <FaCamera size={45} /> },
-    { name: "gallery", icon: <FaImage size={45} /> },
-    { name: "calendar", icon: <FaCalendar size={45} /> },
-    { name: "calculator", icon: <FaCalculator size={45} /> },
-    { name: "settings", icon: <FaCog size={45} /> },
-    { name: "store", icon: <FaGooglePlay size={45} /> },
-    { name: "netflix", icon: <RiNetflixFill size={45} /> },
-    { name: "clock", icon: <FaClock size={45} /> },
-    { name: "rbc", icon: <Image src="/assets/images/rbc-icon.png" width={65} height={65} alt="rbc" />, action: goToRBC },
+    { name: "Messages", icon: <FaMessage size={40} className="text-dark-green"/>, action: goToChat }, // Navigate to Chat
+    { name: "Email", icon: <MdEmail size={50} className="text-dark-green"/>, action: goToEmail },
+    { name: "Browser", icon: <FaChrome size={45} className="text-dark-green"/> },
+    { name: "Camera", icon: <FaCamera size={45} className="text-dark-green"/> },
+    { name: "Gallery", icon: <FaImage size={45} className="text-dark-green"/> },
+    { name: "Calendar", icon: <FaCalendar size={45} className="text-dark-green"/> },
+    { name: "Calculator", icon: <FaCalculator size={45} className="text-dark-green"/> },
+    { name: "Settings", icon: <FaCog size={45} className="text-dark-green"/> },
+    { name: "Store", icon: <FaGooglePlay size={45} className="text-dark-green"/> },
+    { name: "Netflix", icon: <RiNetflixFill size={45} className="text-dark-green"/> },
+    { name: "Clock", icon: <FaClock size={45} className="text-dark-green"/> },
+    { name: "RBC", icon: (
+      <div className="filter dark-green-filter">
+        <Image src="/assets/images/rbc-icon.png" width={65} height={65} alt="rbc" />
+      </div>
+    ), action: goToRBC },
   ];
 
   return (
@@ -53,11 +57,13 @@ export default function HomeScreen({ goToChat, goToEmail, goToRBC }: HomeScreenP
         {appIcons.map((item, index) => (
           <div
             key={index}
-            className="flex items-center justify-center w-16 h-16 bg-gray-200 overflow-hidden rounded-2xl shadow-xl
-            transition-transform transform hover:scale-110"
+            className="flex-row items-center justify-center justify-items-center hover:scale-110 duration-200"
             onClick={item.action} // Trigger navigation when clicked
           >
-            {item.icon}
+            <div className="flex items-center justify-center w-16 h-16 bg-light-cyan overflow-hidden rounded-2xl shadow-xl transition-transform transform hover:scale-110 hover:-translate-y-1">
+              {item.icon}
+            </div>
+            <span className="mt-2 text-xs text-center text-simple-light">{item.name}</span>
           </div>
         ))}
       </div>

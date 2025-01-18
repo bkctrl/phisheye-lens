@@ -17,3 +17,7 @@ body {
   background: var(--deep-blue);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.dark-green-filter {
+  filter: sepia(1) saturate(1) hue-rotate(90deg);
+}

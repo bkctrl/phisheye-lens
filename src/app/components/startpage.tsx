@@ -18,11 +18,11 @@ export default function StartPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/images/Image1.png')] bg-cover bg-center h-64 w-full">
       {/* Header */}
       <div className="max-w-2xl w-full">
-        <div className="text-gray-100 font-semibold text-2xl p-2">
+        <div className="text-simple-light font-semibold text-2xl p-2">
           Enter your password:
         </div>
         <div className="relative mb-8 p-4 bg-gray-600 rounded-xl shadow-2xl max-w-2xl w-full border-4 border-gray-300">
-          <h1 className="text-6xl font-bold font-mono text-left text-gray-100">
+          <h1 className="text-6xl font-bold font-mono text-left text-simple-light">
           <header className="text-left">
             <Typewriter
               options={{
