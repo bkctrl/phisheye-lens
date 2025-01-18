@@ -21,6 +21,7 @@ interface Message {
     sender: Sender;
     recipient: Recipient;
     message: string;
+    senderType: string;
 }
 
 interface Globals { 
@@ -73,7 +74,7 @@ async function fetchCharacterDescription() {
             );
 
             // Populate messages
-            globals.messages = textMessages.flatMap((message) =>
+            globals.messages = textMessages.flatMap(message =>
             message.thread.map((threadMessage: Message) => ({
               sender: {
                 name: threadMessage.sender.name,
@@ -81,6 +82,7 @@ async function fetchCharacterDescription() {
               recipient: {
                 name: threadMessage.recipient.name,
               },
+              senderType: threadMessage.senderType,
               message: threadMessage.message,
             }))
           );
