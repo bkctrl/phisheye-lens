@@ -57,7 +57,7 @@ data.forEach((person, index) => {
   // console.log(selectedDetails);
 });
 // console.log(people)
-
+ 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 async function generateResponse(prompt) {
@@ -72,11 +72,44 @@ async function generateResponse(prompt) {
   }
 }
 
-function generate_email(){
-
+async function generate_email() {
+  return [
+    {
+      sender: { name: "John Doe", email_address: "john.doe@example.com" },
+      recipient: { name: "Alice Smith", email_address: "alice.smith@example.com" },
+      subject: "Urgent: Update Your Account",
+      body: "Hi Alice,\n\nWe noticed suspicious activity on your account. Please update your password immediately to secure your account.\n\nBest,\nThe Security Team"
+    },
+    {
+      sender: { name: "Alice Smith", email_address: "alice.smith@example.com" },
+      recipient: { name: "John Doe", email_address: "john.doe@example.com" },
+      subject: "Re: Urgent: Update Your Account",
+      body: "Hi John,\n\nThanks for letting me know. I’ll update it right away.\n\nRegards,\nAlice"
+    }
+  ];
 }
 
-function generate_text(){
-  
+async function generate_text() {
+  return [
+    {
+      sender: { name: "Mike", phone_number: "+123456789" },
+      recipient: { name: "Alice Smith", phone_number: "+987654321" },
+      message: "Hey Alice, don’t forget to send me the login details for the shared account. Thanks!",
+      senderType: "AI"
+    },
+    {
+      sender: { name: "Alice Smith", phone_number: "+987654321" },
+      recipient: { name: "Mike", phone_number: "+123456789" },
+      message: "Sure, Mike! I'll send them over in a moment.",
+      senderType: "user"
+    },
+    {
+      sender: { name: "Mike", phone_number: "+123456789" },
+      recipient: { name: "Alice Smith", phone_number: "+987654321" },
+      message: "Great, thanks!",
+      senderType: "AI"
+    }
+  ];
 }
 
+module.exports = { generate_email, generate_text };
