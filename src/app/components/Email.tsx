@@ -20,7 +20,19 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
             subject: "Hello, World!",
             body: "This is a test email."
         }
-    ]
+    ];
+
+    const formatBody = (body: string) => {
+        const paragraphs = body.split(/\n\s*\n/);
+    
+        return paragraphs.map((paragraph, index) => (
+            <div key={index}>
+                {paragraph.split("\n").map((line, lineIndex) => (
+                    <p key={lineIndex}>{line}</p>
+                ))}
+            </div>
+        ));
+    };
 
     return (
         <div className="flex flex-col h-screen">
@@ -32,7 +44,7 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
                 <h1 className="text-lg font-bold">Emails</h1>
             </div>
 
-            <div className="flex flex-1">
+            <div className="flex flex-1 overflow-hidden">
                 {/* Sidebar */}
                 <div className="w-1/4 border-r overflow-y-auto">
                     <ul className="divide-y">
@@ -52,24 +64,26 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
-                    {currentEmail ? (
-                        <div className="space-y-4">
-                            <div className="bg-white border rounded-lg p-6 shadow-sm">
-                                <p className="font-bold">From: {currentEmail.from}</p>
-                                <p className="font-bold mt-2">Subject: {currentEmail.subject}</p>
-                                <div className="mt-6 text-gray-700">
-                                    {currentEmail.body}
+                <div className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 p-6 bg-gray-50 overflow-y-auto">
+                        {currentEmail ? (
+                            <div className="space-y-4">
+                                <div className="bg-white border rounded-lg p-6 shadow-sm">
+                                    <p className="font-bold">From: {currentEmail.from}</p>
+                                    <p className="font-bold mt-2">Subject: {currentEmail.subject}</p>
+                                    <div className="mt-6 text-gray-700">
+                                        {formatBody(currentEmail.body)}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center h-full text-gray-500">
-                            Select an email to view
-                        </div>
-                    )}
+                        ) : (
+                            <div className="flex items-center justify-center h-full text-gray-500">
+                                Select an email to view
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }
