@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Typewriter from 'typewriter-effect';
 
 export default function StartPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,39 +17,52 @@ export default function StartPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/images/Image1.png')] bg-cover bg-center h-64 w-full">
       {/* Header */}
-      <header className="mb-8">
-        <h1 className="text-6xl font-bold text-center text-gray-100">Phish 'n' Chips</h1>
-      </header>
+      <div className="max-w-2xl w-full">
+        <div className="text-gray-100 font-semibold text-2xl p-2">
+          Enter your password:
+        </div>
+        <div className="relative mb-8 p-4 bg-gray-600 rounded-xl shadow-2xl max-w-2xl w-full border-4 border-gray-300">
+          <h1 className="text-6xl font-bold font-mono text-left text-gray-100">
+          <header className="text-left">
+            <Typewriter
+              options={{
+                strings: [
+                  'Phish Outa\' Water', 
+                  'Phish_out_of_water',
+                  'phishOutOfWater',
+                  'Ph1sh0ut0fW@t3r',
+                  'PhiSH Outa_water',
+                  'Phish_@uoftHacks',
+                  'Phish Out of Water',
+                  'Fish-outofwatah',
+                  'PhishWater123456',
+                  'Phish1Outa\'2Water3',
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </header>
+          </h1>
+        </div>
+      </div>
 
       {/* Main Content */}
       <main className="text-center space-y-8">
         {/* Buttons */}
         <div className="flex justify-center space-x-4">
           <button
-            className="bg-[#24cf79] text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition"
+            className="bg-[#24cf79] text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition text-2xl"
             onClick={navigateToGame} // Navigate on click
           >
             Start
           </button>
           <button
-            className="bg-[#FF3B30] text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition"
+            className="bg-[#FF3B30] text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition text-2xl"
             onClick={openModal}
           >
             How to Play
           </button>
-        </div>
-
-        {/* About Section */}
-        <div className="max-w-3xl bg-[rgb(10,37,64,0.8)] p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4 text-white">
-            About the Game
-          </h2>
-          <p className="text-white leading-relaxed">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia nostrum quasi quis nobis placeat libero, laudantium repellat consequatur eligendi eos adipisci iste reiciendis illo minus? Quam quaerat maiores cum fugit!
-            Error, laborum corporis distinctio necessitatibus odit ab quisquam hic, aliquam velit quaerat iste facilis, perspiciatis quas ratione sunt molestiae! Obcaecati consectetur expedita suscipit nam commodi! Nisi, unde distinctio. Modi, laboriosam!
-            Dolores optio hic nesciunt reprehenderit perspiciatis ratione corporis consequuntur corrupti similique quasi cupiditate rem id facilis, nulla dolor molestiae praesentium quia necessitatibus magnam nihil. Maxime voluptate reprehenderit dignissimos unde quis.
-          </p>
         </div>
       </main>
 
