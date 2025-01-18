@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Typewriter from 'typewriter-effect';
-
+import { startNewGame, globals } from '@/api/api';
 export default function StartPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter(); // Get the router instance
@@ -14,6 +14,14 @@ export default function StartPage() {
     router.push("/game"); // Navigate to the desired page (e.g., "/game")
   };
 
+  useEffect(() => {
+    const runOnMount = () => {
+      startNewGame();
+      // printGlobals();
+    }
+
+    runOnMount();
+  }, []);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/images/Image1.png')] bg-cover bg-center h-64 w-full">
       {/* Header */}
@@ -53,7 +61,9 @@ export default function StartPage() {
         <div className="flex justify-center space-x-4">
           <button
             className="bg-light-cyan text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition text-2xl"
-            onClick={navigateToGame} // Navigate on click
+            onClick={() => {
+              navigateToGame();
+            }} // Navigate on click
           >
             Start
           </button>

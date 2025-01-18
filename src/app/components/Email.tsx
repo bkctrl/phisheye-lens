@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import {globals} from '@/api/api';
 interface EmailType {
     from: string;
     subject: string;
@@ -8,19 +8,33 @@ interface EmailType {
 
 export default function Email({ goToHome }: { goToHome: () => void }) {
     const [currentEmail, setCurrentEmail] = useState<EmailType | null>(null);
+    const [emails, setEmails] = useState<EmailType[]>([]);
 
-    const emails = [
-        {
-            from: "john@example.com",
-            subject: "Hello, World!",
-            body: "This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test emailThis is a test emailThis is a test email This is a test email This is a test emailThis is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test emailThis is a test emailThis is a test email This is a test email This is a test emailThis is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test emailThis is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test emailThis is a test emailThis is a test email This is a test email This is a test emailThis is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email This is a test email "
-        },
-        {
-            from: "jane@example.com", 
-            subject: "Hello, World!",
-            body: "This is a test email."
+    useEffect(() => {
+        const e = globals.emails;
+        if (e) {
+            const fetchedEmails = e.map((email: any) => ({
+                from: email.sender,
+                subject: email.subject,
+                body: email.message,
+            }));
+            setEmails(fetchedEmails);
+        } else {
+            // Fallback to hardcoded emails if globals.emails is not available
+            setEmails([
+                {
+                    from: "john@example.com",
+                    subject: "Hello, World!",
+                    body: "This is a test email with a long body...",
+                },
+                {
+                    from: "jane@example.com",
+                    subject: "Hi there!",
+                    body: "This is a shorter test email.",
+                },
+            ]);
         }
-    ];
+    }, []);
 
     const formatBody = (body: string) => {
         const paragraphs = body.split(/\n\s*\n/);

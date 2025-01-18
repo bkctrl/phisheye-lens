@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 const Notepad: React.FC = () => {
   const [notes, setNotes] = useState<string>('');
-  const [position, setPosition] = useState({ x: window.innerWidth - 250, y: 50 });
+  const [position, setPosition] = useState({ x: 0, y: 50 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   // Load notes from localStorage
   useEffect(() => {
-    const savedNotes = localStorage.getItem('notepadNotes');
-    if (savedNotes) setNotes(savedNotes);
+    if (typeof window !== 'undefined') {
+      const savedNotes = localStorage.getItem('notes');
+      setNotes(savedNotes || '');
+      setPosition({ x: window.innerWidth - 250, y: 50 });
+    }
   }, []);
 
   // Save notes to localStorage
