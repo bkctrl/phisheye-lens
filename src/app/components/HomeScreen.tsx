@@ -45,6 +45,7 @@ export default function HomeScreen({ goToChat, goToEmail }: HomeScreenProps) {
         objectFit="cover"
         alt="tablet background"
         className="absolute z-0"
+        priority
       />
       {/* App Icons Grid */}
       <div className="grid grid-cols-4 gap-12 gap-x-16 items-center justify-items-center content-center z-10">
