@@ -18,9 +18,10 @@ import Image from "next/image";
 interface HomeScreenProps {
   goToChat: () => void;
   goToEmail: () => void;
+  goToRBC: () => void;
 }
 
-export default function HomeScreen({ goToChat, goToEmail }: HomeScreenProps) {
+export default function HomeScreen({ goToChat, goToEmail, goToRBC }: HomeScreenProps) {
   const appIcons = [
     { name: "messages", icon: <FaMessage size={40} />, action: goToChat }, // Navigate to Chat
     { name: "email", icon: <MdEmail size={50} />, action: goToEmail },
@@ -33,7 +34,7 @@ export default function HomeScreen({ goToChat, goToEmail }: HomeScreenProps) {
     { name: "store", icon: <FaGooglePlay size={45} /> },
     { name: "netflix", icon: <RiNetflixFill size={45} /> },
     { name: "clock", icon: <FaClock size={45} /> },
-    { name: "rbc", icon: <Image src="/assets/images/rbc-icon.png" width={65} height={65} alt="rbc" /> },
+    { name: "rbc", icon: <Image src="/assets/images/rbc-icon.png" width={65} height={65} alt="rbc" />, action: goToRBC },
   ];
 
   return (
