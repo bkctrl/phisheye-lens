@@ -57,7 +57,7 @@ data.forEach((person, index) => {
   // console.log(selectedDetails);
 });
 // console.log(people)
- 
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 async function generateResponse(prompt) {
