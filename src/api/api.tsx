@@ -30,6 +30,8 @@ interface Globals {
     guessInput: string
     emails: Email[];
     messages: Message[];
+    guessHistory: string[];
+    guessResult: string;
 }
 
 const globals: Partial<Globals> = {};
@@ -112,45 +114,44 @@ async function fetchCharacterDescription() {
     printGlobals();
 }
 
+  // Submit Password Guess
+  async function submitGuess(inputGuess: string) {
+    const guess = inputGuess.trim();
+    if (!guess) return;
 
+    // Increment guess counters
+    if (globals.guessCount === undefined) {
+        globals.guessCount = 0;
+    } else {
+        globals.guessCount++;
+    }
+    globals.guessCount++;
 
-//   // Submit Password Guess
-//   async function submitGuess() {
-//     const guess = globals.guessInput.trim();
-//     if (!guess) return;
+    if (!globals.guessHistory) {
+        globals.guessHistory = [];
+    }
+    globals.guessHistory.push(guess);
 
-//     // Increment guess counters
-//     if (globals.guessCount === undefined) {
-//         globals.guessCount = 0;
-//     } else {
-//         globals.guessCount++;
-//     }
-//     totalGuessCount++;
-//     guessHistory.innerHTML += `<li>${guess}</li>`;
-//     guessInput.value = ''; // Clear the input field after each guess
+    try {
+        const response = await fetch(`${apiBase}/guess`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ guess })
+        });
+        const data = await response.json();
 
-//     try {
-//         const response = await fetch(`${apiBase}/guess`, {
-//             method: 'POST',
-//             headers: { 'Content-Type': 'application/json' },
-//             body: JSON.stringify({ guess })
-//         });
-//         const data = await response.json();
-
-//         responseDiv.textContent = data.message;
-//         responseDiv.style.color = data.success ? 'green' : 'red';
-//         document.getElementById('total-guesses').textContent = `Total Guesses: ${totalGuessCount}`;
-//         if (data.success) {
-//             // Display results in the sidebar
-//             guessHistory.innerHTML += `<li><strong>Correct!</strong> Took ${currentGameGuessCount} guesses.</li>`;
-            
-//             // Reset for a new game
-//             await startNewGame();
-//         }
-//     } catch (error) {
-//         console.error('Error submitting guess:', error);
-//     }
-// }
+        globals.guessResult = data.message;
+        if (data.success) {
+            // Display results in the sidebar
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error submitting guess:', error);
+    }
+    return false;
+}
 
 
 //   // Send Message
