@@ -6,6 +6,7 @@ import Chat from "./Chat";
 import Notepad from '@/app/components/Notepad';
 import Email from "./Email";
 import RBC from "./RBC";
+import router from "next/router";
 
 const Phone = () => {
   const [currentScreen, setCurrentScreen] = useState<"home" | "chat" | "email" | "rbc">("home"); // State with a union type for allowed screen values

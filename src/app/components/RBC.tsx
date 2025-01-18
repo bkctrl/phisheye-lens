@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Confetti from 'react-confetti';
 
 interface RBCProps {
     goToHome: () => void;
@@ -9,18 +10,30 @@ export default function RBC({ goToHome }: RBCProps) {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showConfetti, setShowConfetti] = useState(false);
 
     const validatePassword = async (pass: string): Promise<boolean> => {
         // Simulate password validation
         return pass === "password123";
     };
 
+    useEffect(() => {
+        if (showConfetti) {
+            const timer = setTimeout(() => {
+                setShowConfetti(false);
+            }, 5000); // Show confetti for 3 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [showConfetti]);
+
     return (
         <div className="relative w-full h-full bg-[#006AC3] bg-[url('/assets/images/rbc-icon.png')] bg-contain bg-center">
+            {showConfetti && <Confetti />}
+            
             {/* Back Button */}
             <button
                 onClick={goToHome}
-                className={`relative z-10 m-4 ${isLoggedIn ? "text-[#006AC3] hover:text-[#018cfe]" : "text-gray-200 hover:text-white"}`}
+                className={`relative z-10 m-4 font-bold ${isLoggedIn ? "text-[#006AC3] hover:text-[#018cfe]" : "text-gray-200 hover:text-white"}`}
             >
                 Back
             </button>
@@ -28,7 +41,7 @@ export default function RBC({ goToHome }: RBCProps) {
             {/* Centered Card */}
             {!isLoggedIn ? (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-96">
-                    <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+                    <h2 className="text-2xl font-bold text-center mb-6">RBC Online Banking Login</h2>
                     <div className="space-y-4">
                         <input
                             type="text"
@@ -53,6 +66,7 @@ export default function RBC({ goToHome }: RBCProps) {
                                 if (isValid) {
                                     setError(false);
                                     setIsLoggedIn(true);
+                                    setShowConfetti(true);
                                 } else {
                                     setError(true);
                                 }
