@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChatBubble } from "../ui/chatBubble";
-import { globals } from "@/api/api";
-// import { ChatBubble } from "./ChatBubble";
+import { globals, sendMessage } from "@/api/api";
 
 interface ChatProps {
   goToHome: () => void;
@@ -10,7 +9,7 @@ interface ChatProps {
 interface Message {
   text: string;
   type: "sent" | "received";
-  timestamp: string; // Timestamp for the message
+  timestamp: string;
 }
 
 export default function Chat({ goToHome }: ChatProps) {
@@ -19,17 +18,45 @@ export default function Chat({ goToHome }: ChatProps) {
     { text: "I'm good, thanks!", type: "sent", timestamp: "10:01 AM" },
   ]);
   const [input, setInput] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = () => {
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Scroll to bottom whenever messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = async () => {
     if (input.trim()) {
       const currentTime = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       });
-      setMessages([
-        ...messages,
-        { text: input, type: "sent", timestamp: currentTime },
-      ]);
+
+      const userMessage: Message = {
+        text: input,
+        type: "sent" as const,
+        timestamp: currentTime,
+      }
+      
+      setMessages(prevMessages => [...prevMessages, userMessage]);
+      
+      const response = await sendMessage(input);
+      if (response) {
+        const currentTime = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const responseMessage: Message = {
+          text: response,
+          type: "received" as const,
+          timestamp: currentTime,
+        };
+        setMessages(prevMessages => [...prevMessages, responseMessage]);
+      }
       setInput("");
     }
   };
@@ -73,6 +100,7 @@ export default function Chat({ goToHome }: ChatProps) {
             timestamp={msg.timestamp}
           />
         ))}
+        <div ref={messagesEndRef} /> {/* Empty div for scrolling to bottom */}
       </div>
 
       {/* Chat Input */}
@@ -81,12 +109,12 @@ export default function Chat({ goToHome }: ChatProps) {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
           placeholder="Type your message..."
           className="flex-1 p-2 rounded-lg bg-white border border-gray-300"
         />
         <button
-          onClick={sendMessage}
+          onClick={handleSendMessage}
           className="ml-2 bg-blue-500 text-white p-2 rounded-lg"
         >
           Send
