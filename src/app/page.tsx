@@ -1,11 +1,10 @@
+"use server";
 import Image from "next/image";
-import Intro from "@/app/components/Intro";
+import StartPage from "@/app/components/startpage";
 import Phone from "@/app/components/Phone";
 
 export default function Home() {
   return (
-    <div>
-      <Phone/>
-    </div>
+    <StartPage/>
   );
 }
