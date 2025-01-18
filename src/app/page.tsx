@@ -3,8 +3,10 @@ import Image from "next/image";
 import StartPage from "@/app/components/startpage";
 import Phone from "@/app/components/Phone";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <StartPage/>
+    <div>
+      <StartPage/>
+    </div>
   );
 }
