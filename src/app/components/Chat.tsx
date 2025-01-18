@@ -25,14 +25,33 @@ export default function Chat({ goToHome }: ChatProps) {
       const currentTime = new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
-      }); // Get the current time in HH:MM AM/PM format
+      });
       setMessages([
         ...messages,
         { text: input, type: "sent", timestamp: currentTime },
       ]);
-      setInput(""); // Clear input
+      setInput("");
     }
   };
+
+  useEffect(() => {
+    const apiMessages = globals.messages;
+    if (apiMessages && Array.isArray(apiMessages) && apiMessages.length > 0) {
+      const fetchedMessages: Message[] = apiMessages.map((message: any) => {
+        const currentTime = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        
+        return {
+          text: message.message,
+          type: message.senderType === "user" ? ("sent" as const) : ("received" as const),
+          timestamp: message.timestamp || currentTime,
+        };
+      });
+      setMessages(fetchedMessages);
+    }
+  }, [globals.messages]);
 
   return (
     <div className="flex flex-col h-full bg-[#134B70]">
@@ -62,6 +81,7 @@ export default function Chat({ goToHome }: ChatProps) {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Type your message..."
           className="flex-1 p-2 rounded-lg bg-white border border-gray-300"
         />
