@@ -1,4 +1,4 @@
-const apiBase = 'http://localhost:3000';
+const apiBase = 'https://phisheyelens-api.vercel.app';
 
 interface Sender {
     name: string;
