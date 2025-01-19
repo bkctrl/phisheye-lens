@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Phish\'n\'chips",
+  title: "Phish-Eye Lens",
   description: "Password Cracking Game",
 };
 

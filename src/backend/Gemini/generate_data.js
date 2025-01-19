@@ -1,4 +1,5 @@
-
+const dotenv = require("dotenv");
+dotenv.config();
 const data = require('./fake_details.json'); // Load the JSON file
 num_of_fake_details=2
 seed=Math.ceil(Math.random() * 10000)%num_of_fake_details
