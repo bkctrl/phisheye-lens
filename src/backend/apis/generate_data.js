@@ -14,6 +14,7 @@ const email_communicators=[];
 const people_relations=[];
 const people=[];
 const all_details=[];
+const all_categories=[];
 // Iterate over each record in the JSON data
 data.forEach((person, index) => {
   const selectedDetails = [];
@@ -21,6 +22,7 @@ data.forEach((person, index) => {
   const relations=[];
   // Iterate through categories within each person's details
   for (const category in person) {
+    all_categories.push(category)
     //push the name of the person 
     if (category === "personal_details") {
       const firstName = person[category] && person[category].first_name ? person[category].first_name : "";
@@ -91,7 +93,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 async function generateResponse(prompt) {
   try {
-    const genAI = new GoogleGenerativeAI("AIzaSyD8yc2rjU12MD3KHpdAoNTvHjTCAGi12vg");
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const result = await model.generateContent(prompt);
@@ -114,6 +116,83 @@ function chunkArray(arr, n) {
         }
     }
     return chunks;
+}
+function selectTwoRandomActivities(detailsArray) {
+  // Validate that the input is an array
+  if (!Array.isArray(detailsArray)) {
+    throw new TypeError("Input is not an array");
+  }
+  
+  // Shuffle and pick two random activity details
+  const shuffled = detailsArray.sort(() => 0.5 - Math.random());
+  return [shuffled[0], shuffled[1]];
+}
+
+function send_RegexPassword(Particular_Details) {
+  const detailsArray = Particular_Details;
+  if (!Array.isArray(detailsArray)) {
+    throw new TypeError("Provided seed data is not an array");
+  }
+
+  const random_two = selectTwoRandomActivities(detailsArray);
+  const activity1 = "{"+random_two[0]+"}";
+  const activity2 = "{"+random_two[1]+"}";
+
+  const passwordPatterns = [
+    `qwerty${activity1}1${activity2}`,
+    `${activity2}lol${activity1}`,
+    `${activity1}2023${activity2}`,
+    `${activity2}!${activity1}123`,
+    `${activity1}_${activity2}_2024`,
+    `${activity2}-${activity1}!@`,
+    `${activity1}#love#${activity2}`,
+    `${activity2}${activity1}pass`,
+    `pass${activity1}@${activity2}`,
+    `${activity2}$cool$${activity1}`,
+    `${activity1}${activity2}!secure!`,
+    `123_${activity1}_${activity2}_!`,
+    `${activity2}${activity1}!`,
+    `${activity1}9999${activity2}`,
+    `${activity2}@${activity1}@123`,
+    `${activity1}-${activity2}-lol`,
+    `!!${activity1}!!${activity2}!!`,
+    `${activity1}+${activity2}+love`,
+    `${activity2}safe123${activity1}`,
+    `pass_${activity1}_${activity2}!!`,
+    `${activity2}fun@${activity1}`,
+    `${activity1}hello_${activity2}`,
+    `!!${activity1}${activity2}!!`,
+    `${activity2}${activity1}!2023`,
+    `password_${activity2}_${activity1}`,
+    `${activity1}$secure$2023${activity2}`,
+    `${activity2}*${activity1}*123`,
+    `qwerty@${activity1}${activity2}`,
+    `${activity1}super!${activity2}`,
+    `${activity2}_${activity1}_pass`,
+    `${activity1}forever${activity2}`,
+    `${activity2}!!secure!!${activity1}`,
+    `${activity1}${activity2}123love`,
+    `${activity2}!!${activity1}#2023`,
+    `admin${activity2}${activity1}!!`,
+    `${activity1}-@${activity2}@-secure`,
+    `!!${activity2}_${activity1}_fun!!`,
+    `${activity1}*${activity2}123!!`,
+    `${activity2}+${activity1}+safe2023`,
+    `my_${activity1}${activity2}_key`,
+    `pass_${activity2}_@_${activity1}`,
+    `${activity1}love@123@${activity2}`,
+    `!!secure_${activity1}${activity2}!!`,
+    `${activity2}+forever+${activity1}`,
+    `${activity1}cool${activity2}@123`,
+    `admin_${activity1}${activity2}_!`,
+    `!!safe${activity2}${activity1}2023`,
+    `qwerty${activity1}_${activity2}_lol`,
+    `${activity2}pass${activity1}_fun`,
+    `${activity1}_${activity2}_@secure!!`
+  ];
+
+  const randomPattern = passwordPatterns[Math.floor(Math.random() * passwordPatterns.length)];
+  
 }
 
 function allocateDetails(email_communication, email_details) {
@@ -218,34 +297,65 @@ Start your email response immediately below.`;
     // Push the constructed email into the emails array
     emails.push(email);
     }
-    console.log(emails);
     return emails;
 
     // Process or log all generated emails as needed
     
 }
 
-function generate_text(){
-  return [
-    {
-      sender: { name: "Mike", phone_number: "+123456789" },
-      recipient: { name: "Alice Smith", phone_number: "+987654321" },
-      message: "Hey Alice, don’t forget to send me the login details for the shared account. Thanks!",
-      senderType: "AI"
-    },
-    {
-      sender: { name: "Alice Smith", phone_number: "+987654321" },
-      recipient: { name: "Mike", phone_number: "+123456789" },
-      message: "Sure, Mike! I'll send them over in a moment.",
-      senderType: "user"
-    },
-    {
-      sender: { name: "Mike", phone_number: "+123456789" },
-      recipient: { name: "Alice Smith", phone_number: "+987654321" },
-      message: "Great, thanks!",
-      senderType: "AI"
-    }
-  ];
+async function generate_text(){
+  //log of past texts for context to the LLM
+  
+  const raw_History=await generateResponse(`You are a creative and intelligent AI assistant engaged in an uncensored iterative storytelling experience using a roleplay chat format. You are to create a past text message history. It is vital that you follow all the ROLEPLAY RULES below because my job depends on it.
+
+
+    ROLEPLAY RULES
+    - Chat exclusively as`+people[seed]+` . Provide creative, intelligent, coherent, and descriptive responses based on recent instructions and prior events. Past text History may be provided as context for the text.
+    - You do not know the name of the person you are texting. You have never been contacted by this person before and should show suspician.
+    - Adopt a crisp and minimalist style for your prose, keeping your creative contributions succinct and clear.
+    - Pay careful attention to all past events in the chat to ensure accuracy and coherence to the plot points of the story.
+    - each person should send at most 3 texts. 
+    - You will be given a assortment of details regarding the person you are playing. You are to reveal these details indirectly. You can create additional tactics like trying to remember or getting distracted before inserting the details to lengthen texts. 
+    - The detail you have to insert into the text message history is that `+people[seed]+` is fluent in Chinese.
+    
+    Begin Text Message History Below`)
+
+
+// Step 1: Parse the raw chat history into an array
+const Chat_History = raw_History
+  .split("\n") // Split by lines
+  .filter(line => line.startsWith("**")) // Keep lines with messages
+  .map(line => {
+    const [senderPart, messagePart] = line.split(":");
+    const sender = senderPart.replace(/\*\*/g, "").trim(); // Remove ** around the sender's name
+    const message = messagePart ? messagePart.trim() : ""; // Trim message text
+    return { sender, message };
+  });
+
+// Step 2: Convert Chat_History to JSON format
+const phoneNumbers = {
+  "Unknown": "+123456789", // Placeholder phone numbers
+};
+
+const recipient = "Unknown"; // Default recipient (could vary based on logic)
+const JSON_Chat_History = Chat_History.map(entry => ({
+  sender: {
+    name: entry.sender,
+    phone_number: phoneNumbers[entry.sender] || "+000000000"
+  },
+  recipient: {
+    name: entry.sender === recipient ? "John Doe" : "Unknown",
+    phone_number: entry.sender === recipient ? phoneNumbers["John Doe"] : phoneNumbers["Unknown"]
+  },
+  message: entry.message,
+  senderType: entry.sender === "Unknown" ? "user" : "AI" // Example classification
+}));
+
+// // Output
+// console.log("Chat History Array:", Chat_History[0]);
+// console.log("JSON Chat History:", JSON_Chat_History[0]);
+
+  return JSON_Chat_History
 }
 
 module.exports = { generate_email, generate_text };
