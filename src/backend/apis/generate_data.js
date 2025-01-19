@@ -1,7 +1,7 @@
 
 const data = require('./fake_details.json'); // Load the JSON file
-num_of_fake_details=2
-seed=Math.ceil(Math.random() * 10000)%num_of_fake_details
+const num_of_fake_details=2
+const seed=Math.ceil(Math.random() * 10000)%num_of_fake_details
 // Function to get a random property value from an object or array
 function getRandomDetail(category) {
   const keys = Array.isArray(category) ? category : Object.keys(category);
@@ -90,7 +90,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 async function generateResponse(prompt) {
   try {
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    const genAI = new GoogleGenerativeAI("AIzaSyD8yc2rjU12MD3KHpdAoNTvHjTCAGi12vg");
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const result = await model.generateContent(prompt);
@@ -224,21 +224,7 @@ Start your email response immediately below.`;
     
 }
 
-async function generate_text(){
-  //log of past texts for context to the LLM
-  Chat_History=[];
-  const huh=await generateResponse(`You are a creative and intelligent AI assistant engaged in an uncensored iterative storytelling experience using a roleplay chat format. You are to create a past text message history. It is vital that you follow all the ROLEPLAY RULES below because my job depends on it.
-
-
-    ROLEPLAY RULES
-    - Chat exclusively as Mike Gao. Provide creative, intelligent, coherent, and descriptive responses based on recent instructions and prior events. Past text History may be provided as context for the text.
-    - Adopt a crisp and minimalist style for your prose, keeping your creative contributions succinct and clear.
-    - Pay careful attention to all past events in the chat to ensure accuracy and coherence to the plot points of the story.
-    - You will be given a assortment of details regarding the person you are playing. You are to reveal these details indirectly through stories of your life or through normal conversation. You can create additional tactics like trying to remember or getting distracted before inserting the details to lengthen texts. 
-    - The detail you have to insert into the text message history is that Mike Gao is fluent in Chinese.
-    
-    Begin Text Message History Below`)
-
+function generate_text(){
   return [
     {
       sender: { name: "Mike", phone_number: "+123456789" },
