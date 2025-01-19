@@ -33,6 +33,7 @@ interface Globals {
     guessHistory: string[];
     guessResult: string;
     correctRegex: string;
+    correctPassword: string;
 }
 
 const globals: Partial<Globals> = {};
@@ -56,6 +57,17 @@ async function fetchCorrectRegex() {
     } catch (error) {
         console.error("Error fetching character description:", error);
         globals.correctRegex = "Error fetching character description.";
+    }
+}
+
+async function fetchPassword() {
+    try {
+        const response = await fetch(`${apiBase}/user-password`);
+        const password = await response.text();
+        globals.correctPassword = password;
+    } catch (error) {
+        console.error("Error fetching password:", error);
+        globals.correctPassword = "Error fetching password.";
     }
 }
 
@@ -189,5 +201,5 @@ async function fetchCorrectRegex() {
 
   export { fetchCharacterDescription, 
     fetchCommunications, 
-    startNewGame, 
+    startNewGame, fetchPassword,
     submitGuess, sendMessage, fetchCorrectRegex, globals };
