@@ -24,6 +24,7 @@ const Phone = () => {
         isLandscape
         statusbarColor={"#2D1E24"}
         transparentNavBar
+        hideStatusBar
         className="shadow-2xl slide-in-from-bottom"
       >
         <div className="relative w-full h-full bg-gray-200">
