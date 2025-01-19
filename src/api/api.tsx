@@ -89,6 +89,7 @@ async function fetchCharacterDescription() {
             }))
           );
       } catch (error) {
+          console.log(`${apiBase}/communications`);
           console.error("Error fetching communications:", error);
       }
   }
