@@ -4,7 +4,7 @@ const cors = require('cors');
 const { generate_email, generate_text } = require('./gemini/generate_data');
 
 const app = express();
-const PORT = 3002;
+const PORT = 3001;
 
 app.use(express.json());
 app.use(cors());

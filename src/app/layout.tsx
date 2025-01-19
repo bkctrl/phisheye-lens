@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Phish\'n\'chips",
+  title: "Phish-Eye Lens",
   description: "Password Cracking Game",
 };
 
@@ -24,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/phisheyelogo.ico" type="image/x-icon"/>
+      </head>
       <body>
         {children}
       </body>
