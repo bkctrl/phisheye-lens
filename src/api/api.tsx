@@ -1,4 +1,4 @@
-const apiBase = 'http://localhost:3001';
+const apiBase = 'http://localhost:3002';
 
 interface Sender {
     name: string;
@@ -183,4 +183,4 @@ async function fetchCharacterDescription() {
 //       }
 //   }
 
-  export { fetchCharacterDescription, fetchCommunications, startNewGame, globals };
+  export { fetchCharacterDescription, fetchCommunications, startNewGame, globals, submitGuess };
