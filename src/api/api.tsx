@@ -56,7 +56,7 @@ async function fetchCharacterDescription() {
           console.log("Data received from API:", data);
 
           // Access nested communications array
-          const communications = data.communications.communications;
+          const communications = data.communications;
 
           if (!Array.isArray(communications)) {
               throw new Error("Invalid communications format: Expected an array.");
@@ -117,7 +117,7 @@ async function fetchCharacterDescription() {
   // Submit Password Guess
   async function submitGuess(inputGuess: string) {
     const guess = inputGuess.trim();
-    if (!guess) return;
+    if (!guess) return false;
 
     // Increment guess counters
     if (globals.guessCount === undefined) {
@@ -125,7 +125,6 @@ async function fetchCharacterDescription() {
     } else {
         globals.guessCount++;
     }
-    globals.guessCount++;
 
     if (!globals.guessHistory) {
         globals.guessHistory = [];
@@ -153,34 +152,24 @@ async function fetchCharacterDescription() {
     return false;
 }
 
+  // Send Message
+  async function sendMessage(inputMessage: string) {
+      const message = inputMessage.trim();
+      if (!message) return;
 
-//   // Send Message
-//   async function sendMessage() {
-//       const message = chatInput.value.trim();
-//       if (!message) return;
+      try {
+          const response = await fetch(`${apiBase}/chat`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message })
+          });
+          const data = await response.json();
 
-//       chatWindow.innerHTML += `<div class="chat-message user">
-//           <div class="sender-name">Alice Smith</div>
-//           <div class="chat-bubble user">${message}</div>
-//       </div>`;
-//       chatInput.value = '';
+          return data.response;
+      } catch (error) {
+          console.error('Error sending message:', error);
+      }
+      return "No response received.";
+  }
 
-//       try {
-//           const response = await fetch(`${apiBase}/chat`, {
-//               method: 'POST',
-//               headers: { 'Content-Type': 'application/json' },
-//               body: JSON.stringify({ message })
-//           });
-//           const data = await response.json();
-
-//           chatWindow.innerHTML += `<div class="chat-message llm">
-//               <div class="sender-name">Mike</div>
-//               <div class="chat-bubble llm">${data.response}</div>
-//           </div>`;
-//           chatWindow.scrollTop = chatWindow.scrollHeight;
-//       } catch (error) {
-//           console.error('Error sending message:', error);
-//       }
-//   }
-
-  export { fetchCharacterDescription, fetchCommunications, startNewGame, globals };
+  export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, globals };
