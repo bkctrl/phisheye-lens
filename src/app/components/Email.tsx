@@ -49,7 +49,7 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-full">
             {/* Header */}
             <div className="flex items-center justify-between p-4 bg-blue-500 text-white">
                 <button onClick={goToHome} className="text-white">
@@ -58,22 +58,22 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
                 <h1 className="text-lg font-bold">Emails</h1>
             </div>
 
-            <div className="flex flex-1 overflow-hidden">
-                {/* Sidebar */}
-                <div className="w-1/4 border-r overflow-y-auto">
-                    <ul className="divide-y">
-                        {emails.map((email, index) => (
-                            <li 
-                                key={index}
-                                onClick={() => setCurrentEmail(email)}
-                                className={`p-4 cursor-pointer hover:bg-gray-100 ${
-                                    currentEmail === email ? 'bg-blue-50' : ''
-                                }`}
-                            >
-                                <p className="font-medium truncate">{email.from}</p>
-                                <p className="text-gray-600 truncate">{email.subject}</p>
-                            </li>
-                        ))}
+            <div className="flex flex-1 min-h-0">
+                {/* Sidebar with emails list */}
+                <div className="w-1/4 border-r flex flex-col min-h-0">
+                    <ul className="divide-y overflow-y-auto flex-1">
+                    {emails.map((email, index) => (
+                        <li 
+                        key={index}
+                        onClick={() => setCurrentEmail(email)}
+                        className={`p-4 cursor-pointer hover:bg-gray-100 ${
+                            currentEmail === email ? 'bg-blue-50' : ''
+                        }`}
+                        >
+                        <p className="font-medium truncate">{email.from}</p>
+                        <p className="text-gray-600 truncate">{email.subject}</p>
+                        </li>
+                    ))}
                     </ul>
                 </div>
 
