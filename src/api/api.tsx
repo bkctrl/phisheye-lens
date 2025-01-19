@@ -32,6 +32,7 @@ interface Globals {
     messages: Message[];
     guessHistory: string[];
     guessResult: string;
+    correctRegex: string;
 }
 
 const globals: Partial<Globals> = {};
@@ -44,6 +45,17 @@ async function fetchCharacterDescription() {
     } catch (error) {
         console.error("Error fetching character description:", error);
         globals.characterDescriptionText = "Error fetching character description.";
+    }
+}
+
+async function fetchCorrectRegex() {
+    try {
+        const reponse = await fetch(`${apiBase}/correct-regex`);
+        const correctRegex = await reponse.text();
+        globals.correctRegex = correctRegex;
+    } catch (error) {
+        console.error("Error fetching character description:", error);
+        globals.correctRegex = "Error fetching character description.";
     }
 }
 
@@ -113,6 +125,7 @@ async function fetchCharacterDescription() {
     }
     await fetchCommunications();
     printGlobals();
+    await fetchCorrectRegex();
 }
 
   // Submit Password Guess
@@ -172,5 +185,6 @@ async function fetchCharacterDescription() {
       }
       return "No response received.";
   }
+  
 
-  export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, globals };
+  export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, fetchCorrectRegex, globals };
