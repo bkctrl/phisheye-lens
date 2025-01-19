@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { globals } from '@/api/api';
 
 const RegexCard = () => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -10,20 +11,9 @@ const RegexCard = () => {
         // Check if window is defined to avoid SSR issues
         if (typeof window !== "undefined") {
             setPosition({
-                x: window.innerWidth - 300,
+                x: 0,
                 y: window.innerHeight - 200,
             });
-
-            const handleResize = () => {
-                setPosition(prev => ({
-                    x: Math.min(prev.x, window.innerWidth - 250),
-                    y: Math.min(prev.y, window.innerHeight - 150)
-                }));
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            return () => window.removeEventListener('resize', handleResize);
         }
     }, []); // Only run on the client side (after component mounts)
 
@@ -47,7 +37,7 @@ const RegexCard = () => {
             const newY = e.clientY - offset.y;
 
             const constrainedX = Math.max(0, Math.min(newX, window.innerWidth - 250));
-            const constrainedY = Math.max(0, Math.min(newY, window.innerHeight - 150));
+            const constrainedY = Math.max(0, Math.min(newY, window.innerHeight - 200));
 
             setPosition({
                 x: constrainedX,
@@ -92,22 +82,27 @@ const RegexCard = () => {
         >
             <div className="px-6 py-4">
                 <div className="font-bold text-xl font-mono text-simple-dark">
-                    Password Regex
+                    Instructions
                 </div>
             </div>
-            <div className="px-6 py-4">
-                <p className="text-simple-dark text-base font-mono break-words">
-                    1. Book + Play + Lasdfasdfasdfasol
-                </p>
-                <p className="text-simple-dark text-base font-mono break-words">
-                    2. Game + Number + Lol
-                </p>
-                <p className="text-simple-dark text-base font-mono break-words">
-                    3. Favourite Food + Haters
-                </p>
-                <p className="text-simple-dark text-base font-mono break-words">
-                    4. Favourite Food + Haters
-                </p>
+            <div className="text-base font-mono text-simple-dark px-6">
+                1. Victim Username: badAtPasswords2025
+            </div>
+            <div className="text-base font-mono text-simple-dark px-6">
+                2. Open Messages & Emails for RBC.
+            </div>
+            <div className="text-base font-mono text-simple-dark px-6">
+                3. Ignore Spaces in Password Data.
+            </div>
+            <div className="text-base font-mono font-bold text-simple-dark px-6 mb-1">
+                4. Password Pattern (Regex):
+            </div>
+            <div className="px-6 mb-4">
+                <div className="w-full bg-gray-600 rounded-lg shadow-lg border-4 border-gray-800">
+                    <p className="text-simple-light text-base font-mono break-words p-2">
+                        {globals.correctRegex}
+                    </p>
+                </div>
             </div>
         </div>
     );
