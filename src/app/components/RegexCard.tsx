@@ -105,6 +105,7 @@ const RegexCard = () => {
                 </div>
             </div>
         </div>
+        
     );
 };
 
