@@ -2,9 +2,10 @@ interface ChatBubbleProps {
     text: string; // The message text
     type: "sent" | "received"; // Message type
     timestamp: string; // The message timestamp
+    name: string;
   }
   
-  export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, type, timestamp }) => {
+  export const ChatBubble: React.FC<ChatBubbleProps> = ({ text, type, timestamp, name }) => {
     const isSent = type === "sent";
     return (
       <div
@@ -15,6 +16,7 @@ interface ChatBubbleProps {
             isSent ? "bg-blue-500 text-white" : "bg-gray-300 text-black"
           } break-words`}
         >
+          <p className="font-bold">{name}</p>
           <p>{text}</p>
           <span className={`text-xs block mt-1 ${
             isSent ? "text-gray-50" : "text-gray-500"
