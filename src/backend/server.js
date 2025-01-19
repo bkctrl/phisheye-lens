@@ -10,11 +10,13 @@ app.use(express.json());
 app.use(cors());
 
 let profile;
+let profileLoaded = false; 
 
 (async () => {
     try {
         profile = await generateProfile();
         console.log("Profile initialized successfully:", profile);
+        profileLoaded = true; 
     } catch (error) {
         console.error("Error initializing profile:", error);
     }
@@ -62,6 +64,13 @@ async function generateProfile() {
 // Hardcoded character description
 const characterDescription = "Alice is a curious and driven software engineer who loves exploring new challenges. She values creativity and enjoys spending her weekends hiking with her dog, Fluffy. Alice Smith, aged 28, works as a Software Engineer. In their free time, they enjoy Reading and Hiking. They have a pet named Fluffy (Golden Retriever).";
 
+function checkProfileLoaded(req, res, next) {
+    if (!profileLoaded) {
+        return res.status(503).json({ error: "Profile is still being generated. Please try again later." });
+    }
+    next();
+}
+
 // Endpoints
 app.get('/', (req, res) => {
     res.send('Welcome to the Password Guessing Game API!');
@@ -82,8 +91,14 @@ app.post('/guess', (req, res) => {
 });
 
 app.post('/new-game', async (req, res) => {
-    profile = await generateProfile();
-    res.json({ message: "New game started!", communications: profile.communications });
+    try {
+        profileLoaded = false;
+        profile = await generateProfile();
+        profileLoaded = true;
+        res.json({ message: "New game started!", communications: profile.communications });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to start a new game. Please try again." });
+    }
 });
 
 // Chat endpoint
