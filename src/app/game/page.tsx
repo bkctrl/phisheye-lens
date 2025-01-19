@@ -6,6 +6,7 @@ import GuessHistory from "../components/GuessHistory";
 export default function Home() {
   return (
     <div className="relative min-h-screen">
+      <GuessHistory/>
       <Phone/>
       <RegexCard/>
       <div className="fixed bottom-4 right-4 m-4 z-40">

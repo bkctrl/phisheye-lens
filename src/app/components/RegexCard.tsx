@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from 'react';
 
 const RegexCard = () => {
-    const [position, setPosition] = useState({ x: window.innerWidth - 300, y: window.innerHeight - 200 });
+    const [position, setPosition] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-    // Update position when window is resized
+    // Client-side check for window object
     useEffect(() => {
-        const handleResize = () => {
-            setPosition(prev => ({
-                x: Math.min(prev.x, window.innerWidth - 250),
-                y: Math.min(prev.y, window.innerHeight - 150)
-            }));
-        };
+        // Check if window is defined to avoid SSR issues
+        if (typeof window !== "undefined") {
+            setPosition({
+                x: window.innerWidth - 300,
+                y: window.innerHeight - 200,
+            });
 
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+            const handleResize = () => {
+                setPosition(prev => ({
+                    x: Math.min(prev.x, window.innerWidth - 250),
+                    y: Math.min(prev.y, window.innerHeight - 150)
+                }));
+            };
+
+            window.addEventListener('resize', handleResize);
+
+            return () => window.removeEventListener('resize', handleResize);
+        }
+    }, []); // Only run on the client side (after component mounts)
 
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault(); // Prevent text selection

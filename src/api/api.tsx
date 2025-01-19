@@ -1,4 +1,4 @@
-const apiBase = 'http://localhost:3002';
+const apiBase = 'http://localhost:3001';
 
 interface Sender {
     name: string;
