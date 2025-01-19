@@ -1,11 +1,11 @@
 const apiBase = 'https://phisheyelens-api.vercel.app';
 
-interface Sender {
+export interface Sender {
     name: string;
     email: string;
 }
 
-interface Recipient {
+export interface Recipient {
     name: string;
     email: string;
 }
@@ -17,7 +17,7 @@ interface Email {
     body: string;
 }
 
-interface Message {
+export interface Message {
     sender: Sender;
     recipient: Recipient;
     message: string;
@@ -187,4 +187,7 @@ async function fetchCorrectRegex() {
   }
   
 
-  export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, fetchCorrectRegex, globals };
+  export { fetchCharacterDescription, 
+    fetchCommunications, 
+    startNewGame, 
+    submitGuess, sendMessage, fetchCorrectRegex, globals };
