@@ -56,7 +56,7 @@ async function fetchCharacterDescription() {
           console.log("Data received from API:", data);
 
           // Access nested communications array
-          const communications = data.communications.communications;
+          const communications = data.communications;
 
           if (!Array.isArray(communications)) {
               throw new Error("Invalid communications format: Expected an array.");
@@ -117,7 +117,7 @@ async function fetchCharacterDescription() {
   // Submit Password Guess
   async function submitGuess(inputGuess: string) {
     const guess = inputGuess.trim();
-    if (!guess) return;
+    if (!guess) return false;
 
     // Increment guess counters
     if (globals.guessCount === undefined) {
@@ -125,7 +125,6 @@ async function fetchCharacterDescription() {
     } else {
         globals.guessCount++;
     }
-    globals.guessCount++;
 
     if (!globals.guessHistory) {
         globals.guessHistory = [];
