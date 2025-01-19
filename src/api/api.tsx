@@ -185,5 +185,6 @@ async function fetchCorrectRegex() {
       }
       return "No response received.";
   }
+  
 
   export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, fetchCorrectRegex, globals };
