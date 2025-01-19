@@ -33,7 +33,7 @@ const Phone = () => {
           {currentScreen === "rbc" && <RBC goToHome={goToHome} />}
         </div>
       </AndroidTabMockup>
-      <div className="top-0 right-0 w-2/3 h-1/2 z-10">
+      <div className="w-2/3 h-1/2 z-10">
         <Notepad />
       </div>
     </div>
