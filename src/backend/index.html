@@ -250,7 +250,7 @@
                   console.log("Data received from API:", data);
 
                   // Access nested communications array
-                  const communications = data.communications.communications;
+                  const communications = data.communications;
 
                   if (!Array.isArray(communications)) {
                       throw new Error("Invalid communications format: Expected an array.");

@@ -84,7 +84,7 @@ export default function Email({ goToHome }: { goToHome: () => void }) {
                             <div className="space-y-4">
                                 <div className="bg-white border rounded-lg p-6 shadow-sm">
                                     <p className="font-bold">From: {currentEmail.from}</p>
-                                    <p className="font-bold mt-2">Subject: {currentEmail.subject}</p>
+                                    <p className="font-bold mt-2">{currentEmail.subject}</p>
                                     <div className="mt-6 text-gray-700">
                                         {formatBody(currentEmail.body)}
                                     </div>

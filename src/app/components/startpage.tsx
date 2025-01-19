@@ -5,6 +5,7 @@ import Typewriter from 'typewriter-effect';
 import { startNewGame, globals } from '@/api/api';
 export default function StartPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const router = useRouter(); // Get the router instance
 
   const openModal = () => setIsModalOpen(true);
@@ -15,13 +16,20 @@ export default function StartPage() {
   };
 
   useEffect(() => {
-    const runOnMount = () => {
-      startNewGame();
-      // printGlobals();
-    }
+    const initializeGame = async () => {
+      try {
+        setIsLoading(true); // Set loading to true
+        await startNewGame(); // Wait for data fetching
+      } catch (error) {
+        console.error("Error initializing game:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false once data is fetched
+      }
+    };
 
-    runOnMount();
+    initializeGame(); // Start data fetching on mount
   }, []);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/assets/images/Image1.png')] bg-cover bg-center h-64 w-full">
       {/* Header */}
@@ -60,12 +68,15 @@ export default function StartPage() {
         {/* Buttons */}
         <div className="flex justify-center space-x-4">
           <button
-            className="bg-light-cyan text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition text-2xl"
+            className={`bg-light-cyan text-white font-bold py-3 px-6 rounded-lg transition text-2xl ${
+              isLoading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"
+            }`}
             onClick={() => {
               navigateToGame();
             }} // Navigate on click
+            disabled={isLoading}
           >
-            Start
+            {isLoading ? "Loading..." : "Start"}
           </button>
           <button
             className="bg-off-grey text-white font-bold py-3 px-6 rounded-lg hover:bg-red-600 transition text-2xl"
