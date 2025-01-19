@@ -10,12 +10,13 @@ interface Message {
   text: string;
   type: "sent" | "received";
   timestamp: string;
+  name: string;
 }
 
 export default function Chat({ goToHome }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([
-    { text: "Hi! How are you?", type: "received", timestamp: "10:00 AM" },
-    { text: "I'm good, thanks!", type: "sent", timestamp: "10:01 AM" },
+    { text: "Hi! How are you?", type: "received", timestamp: "10:00 AM", name: "test_user" },
+    { text: "I'm good, thanks!", type: "sent", timestamp: "10:01 AM", name: "test_user" },
   ]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,7 @@ export default function Chat({ goToHome }: ChatProps) {
         text: input,
         type: "sent" as const,
         timestamp: currentTime,
+        name: "You"
       }
       
       setMessages(prevMessages => [...prevMessages, userMessage]);
@@ -54,6 +56,7 @@ export default function Chat({ goToHome }: ChatProps) {
           text: response,
           type: "received" as const,
           timestamp: currentTime,
+          name: "Bot"
         };
         setMessages(prevMessages => [...prevMessages, responseMessage]);
       }
@@ -69,11 +72,11 @@ export default function Chat({ goToHome }: ChatProps) {
           hour: "2-digit",
           minute: "2-digit",
         });
-        
         return {
-          text: message.message,
-          type: message.senderType === "user" ? ("sent" as const) : ("received" as const),
+          text: message.message.substring(3),
+          type: message.sender.name === "Unknown Number" ? ("sent" as const) : ("received" as const),
           timestamp: message.timestamp || currentTime,
+          name: message.sender.name === "Unknown Number" ? "You" : message.sender.name
         };
       });
       setMessages(fetchedMessages);
@@ -98,6 +101,7 @@ export default function Chat({ goToHome }: ChatProps) {
             text={msg.text}
             type={msg.type}
             timestamp={msg.timestamp}
+            name={msg.name}
           />
         ))}
         <div ref={messagesEndRef} /> {/* Empty div for scrolling to bottom */}
