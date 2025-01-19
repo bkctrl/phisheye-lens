@@ -140,6 +140,23 @@ function allocateDetails(email_communication, email_details) {
   return allocatedDetails;
 }
 
+// async function generate_email() {
+//   return [
+//     {
+//       sender: { name: "John Doe", email_address: "john.doe@example.com" },
+//       recipient: { name: "Alice Smith", email_address: "alice.smith@example.com" },
+//       subject: "Urgent: Update Your Account",
+//       body: "Hi Alice,\n\nWe noticed suspicious activity on your account. Please update your password immediately to secure your account.\n\nBest,\nThe Security Team"
+//     },
+//     {
+//       sender: { name: "Alice Smith", email_address: "alice.smith@example.com" },
+//       recipient: { name: "John Doe", email_address: "john.doe@example.com" },
+//       subject: "Re: Urgent: Update Your Account",
+//       body: "Hi John,\n\nThanks for letting me know. I’ll update it right away.\n\nRegards,\nAlice"
+//     }
+//   ];
+// }
+
 async function generate_email() {
     // Validate input array
 
@@ -200,13 +217,13 @@ Start your email response immediately below.`;
     // Push the constructed email into the emails array
     emails.push(email);
     }
+    console.log(emails);
     return emails;
 
     // Process or log all generated emails as needed
     
-    
 }
-emails=generate_email();
+
 function generate_text(){
   return [
     {
@@ -230,3 +247,4 @@ function generate_text(){
   ];
 }
 
+module.exports = { generate_email, generate_text };
