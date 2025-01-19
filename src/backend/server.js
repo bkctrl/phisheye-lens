@@ -34,6 +34,8 @@ async function generateProfile() {
     const emailCommunications = await generate_email();
     const textCommunications = await generate_text();
 
+    console.log("Generated Emails:", JSON.stringify(emailCommunications, null, 2));
+
     return {
         dummyDetails,
         rawPassword,
@@ -47,8 +49,15 @@ async function generateProfile() {
       };
 }
 
-// let profile = await generateProfile();
-let { dummyDetails, rawPassword, hashedPassword } = generateProfile();
+// Initialize the profile on server startup
+(async () => {
+    try {
+        profile = await generateProfile();
+        console.log("Profile initialized successfully");
+    } catch (error) {
+        console.error("Error initializing profile:", error);
+    }
+})();
 
 // Hardcoded character description
 const characterDescription = "Alice is a curious and driven software engineer who loves exploring new challenges. She values creativity and enjoys spending her weekends hiking with her dog, Fluffy. Alice Smith, aged 28, works as a Software Engineer. In their free time, they enjoy Reading and Hiking. They have a pet named Fluffy (Golden Retriever).";
