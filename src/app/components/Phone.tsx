@@ -18,6 +18,8 @@ const Phone = () => {
 
   return (
     <div className="flex items-center justify-center mx-auto w-1/2">
+      <button onClick={goToHome} className="absolute top-5 left-20 z-50"><img className="w-10 h-10 rounded-full" src="/phisheyelogo.ico" alt="Logo" /></button>
+
       {/* Phone Frame */}
       <AndroidTabMockup 
         screenWidth={900}
