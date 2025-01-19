@@ -68,8 +68,10 @@ npm run dev
 3. Interact with the character by sending messages to the character. The character will respond to the user's messages.
 4. Collect personal information from the character's messages and emails to help you guess the password.
 5. Use the note-taking feature to record potential clues and personal information.
-6. Store the previous guesses in a history and use it to guess the password.
-7. Utilize the regex feature to help you guess the password.
+6. Open the RBC Online Banking login page and enter the correct password to win the game.
+7. Store the previous guesses in a history and use it to guess the password.
+9. Utilize the regex feature to help you guess the password.
+10. You can end the game at any time by clicking on the "End Game" button.
 
 ## Video Demo
 
