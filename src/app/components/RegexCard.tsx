@@ -110,6 +110,7 @@ const RegexCard = () => {
                 </p>
             </div>
         </div>
+        
     );
 };
 

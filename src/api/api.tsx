@@ -172,5 +172,6 @@ async function fetchCharacterDescription() {
       }
       return "No response received.";
   }
+  
 
   export { fetchCharacterDescription, fetchCommunications, startNewGame, submitGuess, sendMessage, globals };
