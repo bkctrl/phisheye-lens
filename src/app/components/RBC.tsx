@@ -1,3 +1,4 @@
+import { submitGuess, globals } from "@/api/api";
 import { useState, useEffect } from "react";
 import Confetti from 'react-confetti';
 
@@ -6,22 +7,31 @@ interface RBCProps {
 }
 
 export default function RBC({ goToHome }: RBCProps) {
+    const [guess, setGuess] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showConfetti, setShowConfetti] = useState(false);
 
-    const validatePassword = async (pass: string): Promise<boolean> => {
-        // Simulate password validation
-        return pass === "password123";
-    };
+    const handleSubmit = async () => {
+        // Use password as the guess since that's what we're validating
+        const result = await submitGuess(password);
+        if (result) {
+            setError(false);
+            setIsLoggedIn(true);
+            setShowConfetti(true);
+        } else {
+            setError(true);
+        }
+
+    }
 
     useEffect(() => {
         if (showConfetti) {
             const timer = setTimeout(() => {
                 setShowConfetti(false);
-            }, 5000); // Show confetti for 3 seconds
+            }, 5000); // Show confetti for 5 seconds
             return () => clearTimeout(timer);
         }
     }, [showConfetti]);
@@ -42,7 +52,10 @@ export default function RBC({ goToHome }: RBCProps) {
             {!isLoggedIn ? (
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-96">
                     <h2 className="text-2xl font-bold text-center mb-6">RBC Online Banking Login</h2>
-                    <div className="space-y-4">
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSubmit();
+                    }} className="space-y-4">
                         <input
                             type="text"
                             placeholder="Username"
@@ -61,21 +74,12 @@ export default function RBC({ goToHome }: RBCProps) {
                             <p className="text-red-500 text-sm">Incorrect password</p>
                         )}
                         <button 
-                            onClick={async () => {
-                                const isValid = await validatePassword(password);
-                                if (isValid) {
-                                    setError(false);
-                                    setIsLoggedIn(true);
-                                    setShowConfetti(true);
-                                } else {
-                                    setError(true);
-                                }
-                            }} 
+                            type="submit"
                             className="w-full bg-blue-500 text-white rounded-md p-3 hover:bg-blue-600 transition-colors"
                         >
                             Login
                         </button>
-                    </div>
+                    </form>
                 </div>
             ) : (
                 <div className="absolute inset-0 w-full h-full bg-white">

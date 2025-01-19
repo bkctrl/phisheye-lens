@@ -17,7 +17,7 @@ const Phone = () => {
   const goToRBC: () => void = () => setCurrentScreen("rbc"); // Function to navigate to the rbc screen
 
   return (
-    <div className="flex items-center justify-center mx-auto w-1/2 min-h-screen bg-[rgb(10,37,64)]">
+    <div className="flex items-center justify-center">
       {/* Phone Frame */}
       <AndroidTabMockup 
         screenWidth={900}

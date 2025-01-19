@@ -1,6 +1,7 @@
 "use client";
 import Phone from "@/app/components/Phone";
 import RegexCard from '@/app/components/RegexCard';
+import GuessHistory from "../components/GuessHistory";
 
 export default function Home() {
   return (
