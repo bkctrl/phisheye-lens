@@ -138,6 +138,7 @@ async function fetchPassword() {
     await fetchCommunications();
     printGlobals();
     await fetchCorrectRegex();
+    await fetchPassword();
 }
 
   // Submit Password Guess

@@ -30,7 +30,7 @@ export default function Home() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-light-cyan p-8 rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold mb-4 font-mono">Password:</h2>
-            <p className="font-mono">{globals.correctPassword}</p>
+            <p className="font-mono text-simple-dark">{globals.correctPassword}</p>
             <button
               onClick={togglePopup}
               className="mt-4 bg-gray-500 text-white rounded-lg p-2 hover:bg-gray-600 transition-colors"
