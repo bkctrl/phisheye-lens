@@ -71,52 +71,6 @@ By playing the role of the sneaky phisher, you explore a victim's device and exa
 - Password attempt history
 - Note taking feature for collecting clues
 
-## How It Works 
-The process of setting up the game contents for each round can be broadly seperated into 2 groups: creating fictional details and then generating passwords. Careful thought was put in for both processes to make a challenging but finishable game that reflects the dynamicism of password cracking. 
-
-**Creating Fictional Details**
-To generate details we designed fictional character profiles and catagorized individual characteristics using the JSON format such as the example below of personal_details catagory below. Each character profile was associated with a seed value to tie future events to the profile and allow for easier database integration.
- 
- These profiles were manually designed and checked for quality control and testing purposes.
-
-    "personal_details": {
-      "first_name": "Sophia",
-      "last_name": "Smith",
-      "middle_name": "Grace",
-      "date_of_birth": "1992-11-04",
-      "age": 32,
-      "nickname": "Sophie",
-      "pet_name": "Whiskers"
-    }
-    
-To generate fictional emails, several random details were then selected from each catagory and independently fed into the Gemini 1.5 flash API memoryless to reduce bias and increase independence of each email. The prompt was designed so the gemini API would role play the sender and plant the details as subtle clues for any potential reader. It was made sure through the prompt tuning that the emails collectively contained enough clues to solve the password.
-
-The generation of fictional texts was done differently since with the text feature it brings in the introduction of player interaction with the Gemini model and a stored text log history. To initialize the text history chain of thought prompting was used to generate a cohesive background text history which the player can choose to build off of. The history for all texts are stored and used as context for future messages the player may text to phish for data. The data for the history is stored in a redis database which is regularly updated when players make a text and receive a response from the Gemini API. Similarly to the emails the AI model is designed to plant clues in conversation and roleplays the role of the character of the person being phished.
-
-**Generating Passwords**
-To generate passwords a regex-like system was developed using inspiration from common password patterns that have been found in password leaks in the past. The regex system combines the details with common string patterns used in passwords like 'password_' or '+key' and combines them with some of the details generated earlier to create the password.
-
- ```
-// Loop through all details to assign them to detail1 or detail2 based on category match
-  for (let i = 0; i < all_details[seed].length; i++) {
-    const { category, detail } = all_details[seed][i]; // Destructure category and detail from the current detail object
-
-    // Check if the category matches either of the random_two categories
-    if (category === activity1) {
-      detail1 = detail;  // Assign to detail1 if it matches activity1Category
-    }
-    if (category === activity2) {
-      detail2 = detail;  // Assign to detail2 if it matches activity2Category
-    }
-  }
-
-  // Replace placeholders in the pattern with actual details
-  let finalPattern = randomPattern[0].replace(activity1, detail1).replace(activity2, detail2);
-  finalPattern = finalPattern.replace(/\s+/g, ''); // This removes all spaces
-  const newPattern = [finalPattern]; // Store the final password pattern filled with details
-  ```
-
-The player is given the generalized form of the regex that has been filled in with categories to assist them with cracking the password while the real password is stored with filled in values. The choice was taken to design a password independently of the AI model by black boxing the the password generation and the model. This means the Gemini model has no context to the password that is stored which prevents leaks of the password in the text feature and incentivizes fairness in all the details being given to the player while increasing the challenge of cracking the password.
 
 ## Getting Started
 To set up the project locally and get a local copy up and running:
@@ -163,6 +117,55 @@ You could test the backend both locally or by using a deployed API. The followin
 
 ## API Implementation & Endpoints
 Our API leverages Google's Gemini API! Check out how it is done:
+
+## How It Works 
+The process of setting up the game contents for each round can be broadly seperated into 2 groups: creating fictional details and then generating passwords. Careful thought was put in for both processes to make a challenging but finishable game that reflects the dynamicism of password cracking. 
+
+**Creating Fictional Details**  
+
+To generate details we designed fictional character profiles and catagorized individual characteristics using the JSON format such as the example below of personal_details catagory below. Each character profile was associated with a seed value to tie future events to the profile and allow for easier database integration.
+ 
+ These profiles were manually designed and checked for quality control and testing purposes.
+```json
+    "personal_details": {
+      "first_name": "Sophia",
+      "last_name": "Smith",
+      "middle_name": "Grace",
+      "date_of_birth": "1992-11-04",
+      "age": 32,
+      "nickname": "Sophie",
+      "pet_name": "Whiskers"
+    }
+   ```
+To generate fictional emails, several random details were then selected from each catagory and independently fed into the Gemini 1.5 flash API memoryless to reduce bias and increase independence of each email. The prompt was designed so the gemini API would role play the sender and plant the details as subtle clues for any potential reader. It was made sure through the prompt tuning that the emails collectively contained enough clues to solve the password.
+
+The generation of fictional texts was done differently since with the text feature it brings in the introduction of player interaction with the Gemini model and a stored text log history. To initialize the text history chain of thought prompting was used to generate a cohesive background text history which the player can choose to build off of. The history for all texts are stored and used as context for future messages the player may text to phish for data. The data for the history is stored in a redis database which is regularly updated when players make a text and receive a response from the Gemini API. Similarly to the emails the AI model is designed to plant clues in conversation and roleplays the role of the character of the person being phished.
+
+**Generating Passwords**  
+
+To generate passwords a regex-like system was developed using inspiration from common password patterns that have been found in password leaks in the past. The regex system combines the details with common string patterns used in passwords like 'password_' or '+key' and combines them with some of the details generated earlier to create the password.
+
+ ```js
+// Loop through all details to assign them to detail1 or detail2 based on category match
+  for (let i = 0; i < all_details[seed].length; i++) {
+    const { category, detail } = all_details[seed][i]; // Destructure category and detail from the current detail object
+
+    // Check if the category matches either of the random_two categories
+    if (category === activity1) {
+      detail1 = detail;  // Assign to detail1 if it matches activity1Category
+    }
+    if (category === activity2) {
+      detail2 = detail;  // Assign to detail2 if it matches activity2Category
+    }
+  }
+
+  // Replace placeholders in the pattern with actual details
+  let finalPattern = randomPattern[0].replace(activity1, detail1).replace(activity2, detail2);
+  finalPattern = finalPattern.replace(/\s+/g, ''); // This removes all spaces
+  const newPattern = [finalPattern]; // Store the final password pattern filled with details
+  ```
+
+The player is given the generalized form of the regex that has been filled in with categories to assist them with cracking the password while the real password is stored with filled in values. The choice was taken to design a password independently of the AI model by black boxing the the password generation from the model. This means the model has no context to the password that is stored which prevents leaks of the password in the text feature and incentivizes fairness in all the details being given to the player while increasing the challenge of cracking the password.
 
 ### Implementation
 Navigate to `generate_data.js`:
