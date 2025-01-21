@@ -3,7 +3,7 @@
 <div align="center" id="readme-top">
   <a href="https://github.com/bkctrl/uwmun">
     <br /><br />
-    <img src="https://github.com/user-attachments/assets/0a5e8949-6b98-4968-92f8-3687c1e2dfc3" alt="Logo" width="120" height="110" style="border-radius: 50%;">
+    <img src="https://github.com/user-attachments/assets/e7f2d76e-5657-49d7-97db-39a74956692e" alt="Logo" width="120" height="120" style="border-radius: 50%;">
   </a>
 
 <h3 align="center">Phish-Eye Lens</h3>
