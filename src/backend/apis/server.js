@@ -1,16 +1,18 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
 import cors from 'cors';
-import { generate_email, generate_text } from './generate_data.js';
+import { generate_email, generate_text, send_RegexPassword, generate_text_response } from './generate_data.js';
+import { kv } from '@vercel/kv'; 
 
-const PORT = 4000;
 const app = express();
 app.use(express.json());
 app.use(cors());
-  
+
 
 let profile;
 let profileLoaded = false; 
+
+const { regexPass, userPassword } = send_RegexPassword();
+let generatedResponse;
 
 (async () => {
     try {
@@ -23,7 +25,6 @@ let profileLoaded = false;
     }
 })();
 
-// Function to generate a random profile
 async function generateProfile() {
     const dummyDetails = {
         name: "AliceSmith",
@@ -31,18 +32,15 @@ async function generateProfile() {
         school: "GreenwoodHigh",
         favoriteColor: "Red"
     };
-
-    const rawPassword = Object.values(dummyDetails).join('');
-    const hashedPassword = bcrypt.hashSync(rawPassword, 10);
     const emailCommunications = await generate_email();
     const textCommunications = await generate_text();
-
-    console.log("Generated Emails:", JSON.stringify(emailCommunications, null, 2));
+    
+    await kv.set('chatHistory', textCommunications);
+    console.log("Chat history saved to KV successfully.");
 
     return {
         dummyDetails,
-        rawPassword,
-        hashedPassword,
+        userPassword,
         communications: {
           communications: [
             { type: "email", thread: emailCommunications },
@@ -52,34 +50,13 @@ async function generateProfile() {
       };
 }
 
-// Initialize the profile on server startup
-(async () => {
-    try {
-        console.log("Initializing profile");
-        profile = await generateProfile();
-        console.log("Profile initialized successfully");
-    } catch (error) {
-        console.error("Error initializing profile:", error);
-    }
-})();
-
-// Hardcoded character description
-const characterDescription = "Alice is a curious and driven software engineer who loves exploring new challenges. She values creativity and enjoys spending her weekends hiking with her dog, Fluffy. Alice Smith, aged 28, works as a Software Engineer. In their free time, they enjoy Reading and Hiking. They have a pet named Fluffy (Golden Retriever).";
-
-function checkProfileLoaded(req, res, next) {
-    if (!profileLoaded) {
-        return res.status(503).json({ error: "Profile is still being generated. Please try again later." });
-    }
-    next();
-}
-
 async function waitForProfile(timeout = 100000) {
     const start = Date.now();
     while (!profileLoaded) {
         if (Date.now() - start > timeout) {
             throw new Error("Timeout waiting for profile generation.");
         }
-        await new Promise((resolve) => setTimeout(resolve, 100)); // Wait 100ms before rechecking
+        await new Promise((resolve) => setTimeout(resolve, 100));
     }
 }
 
@@ -91,7 +68,7 @@ app.get('/', (req, res) => {
 app.get('/communications', async (req, res) => {
     try {
         console.log("Waiting for profile to be ready...");
-        await waitForProfile(); // Ensure the profile is ready
+        await waitForProfile();
         console.log("Serving communications...");
         res.json(profile.communications);
     } catch (error) {
@@ -103,11 +80,10 @@ app.get('/communications', async (req, res) => {
 
 app.post('/guess', (req, res) => {
     const { guess } = req.body;
-    const isCorrect = bcrypt.compareSync(guess, hashedPassword);
-
+    const isCorrect = guess === userPassword;
     res.json({
         success: isCorrect,
-        message: isCorrect ? "Correct password!" : "Incorrect password. Try again!"
+        message: userPassword
     });
 });
 
@@ -122,27 +98,37 @@ app.post('/new-game', async (req, res) => {
     }
 });
 
-// Chat endpoint
-app.post('/chat', (req, res) => {
+app.post('/chat', async (req, res) => {
+    console.log("/chat REACHED");
     const { message } = req.body;
-    const llmResponses = {
-        "Hello": "Hi! How can I help you today?",
-        "What's the shared account password?": "Sorry, I can't share that information.",
-        "Can you remind me of my pet's name?": "Sure! Your pet's name is Fluffy.",
-        "Goodbye": "Goodbye! Take care."
-    };
+    console.log("message: ", message);
 
-    const response = llmResponses[message] || "I'm not sure how to respond to that.";
+    const chatHistory = (await kv.get('chatHistory')) || [];
+    console.log("Fetched chatHistory from KV:", chatHistory);
+
+    generatedResponse = await generate_text_response(message, chatHistory);
+    console.log("generatedResponse: ", generatedResponse);
+
+    const response = generatedResponse || "I'm not sure how to respond to that.";
+    console.log("response: ", response);
+
+    const updatedChatHistory = [
+        ...chatHistory,
+        { sender: "User", message },
+        { sender: "AI", message: response }
+    ];
+    await kv.set('chatHistory', updatedChatHistory);
+    console.log("Updated chatHistory saved to KV:", updatedChatHistory);
+
     res.json({ userMessage: message, response });
 });
 
-// Endpoint for character description
-app.get('/character-description', (req, res) => {
-    res.send(characterDescription);
+app.get('/correct-regex', (req, res) => {
+    res.send(regexPass);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.get('/user-password', (req, res) => {
+    res.send(userPassword);
 });
 
-// export default app;
+export default app;

@@ -3,6 +3,7 @@ dotenv.config();
 const data = require('./fake_details.json'); // Load the JSON file
 const num_of_fake_details=2
 const seed=Math.ceil(Math.random() * 10000)%num_of_fake_details
+let chat_history = [];
 // Function to get a random property value from an object or array
 function getRandomDetail(category) {
   const keys = Array.isArray(category) ? category : Object.keys(category);
@@ -128,73 +129,6 @@ function selectTwoRandomActivities(detailsArray) {
   return [shuffled[0], shuffled[1]];
 }
 
-function send_RegexPassword(Particular_Details) {
-  const detailsArray = Particular_Details;
-  if (!Array.isArray(detailsArray)) {
-    throw new TypeError("Provided seed data is not an array");
-  }
-
-  const random_two = selectTwoRandomActivities(detailsArray);
-  const activity1 = "{"+random_two[0]+"}";
-  const activity2 = "{"+random_two[1]+"}";
-
-  const passwordPatterns = [
-    `qwerty${activity1}1${activity2}`,
-    `${activity2}lol${activity1}`,
-    `${activity1}2023${activity2}`,
-    `${activity2}!${activity1}123`,
-    `${activity1}_${activity2}_2024`,
-    `${activity2}-${activity1}!@`,
-    `${activity1}#love#${activity2}`,
-    `${activity2}${activity1}pass`,
-    `pass${activity1}@${activity2}`,
-    `${activity2}$cool$${activity1}`,
-    `${activity1}${activity2}!secure!`,
-    `123_${activity1}_${activity2}_!`,
-    `${activity2}${activity1}!`,
-    `${activity1}9999${activity2}`,
-    `${activity2}@${activity1}@123`,
-    `${activity1}-${activity2}-lol`,
-    `!!${activity1}!!${activity2}!!`,
-    `${activity1}+${activity2}+love`,
-    `${activity2}safe123${activity1}`,
-    `pass_${activity1}_${activity2}!!`,
-    `${activity2}fun@${activity1}`,
-    `${activity1}hello_${activity2}`,
-    `!!${activity1}${activity2}!!`,
-    `${activity2}${activity1}!2023`,
-    `password_${activity2}_${activity1}`,
-    `${activity1}$secure$2023${activity2}`,
-    `${activity2}*${activity1}*123`,
-    `qwerty@${activity1}${activity2}`,
-    `${activity1}super!${activity2}`,
-    `${activity2}_${activity1}_pass`,
-    `${activity1}forever${activity2}`,
-    `${activity2}!!secure!!${activity1}`,
-    `${activity1}${activity2}123love`,
-    `${activity2}!!${activity1}#2023`,
-    `admin${activity2}${activity1}!!`,
-    `${activity1}-@${activity2}@-secure`,
-    `!!${activity2}_${activity1}_fun!!`,
-    `${activity1}*${activity2}123!!`,
-    `${activity2}+${activity1}+safe2023`,
-    `my_${activity1}${activity2}_key`,
-    `pass_${activity2}_@_${activity1}`,
-    `${activity1}love@123@${activity2}`,
-    `!!secure_${activity1}${activity2}!!`,
-    `${activity2}+forever+${activity1}`,
-    `${activity1}cool${activity2}@123`,
-    `admin_${activity1}${activity2}_!`,
-    `!!safe${activity2}${activity1}2023`,
-    `qwerty${activity1}_${activity2}_lol`,
-    `${activity2}pass${activity1}_fun`,
-    `${activity1}_${activity2}_@secure!!`
-  ];
-
-  const randomPattern = passwordPatterns[Math.floor(Math.random() * passwordPatterns.length)];
-  
-}
-
 function allocateDetails(email_communication, email_details) {
   // Initialize an array to hold the allocated details for each person
   let allocatedDetails = new Array(email_communication.length).fill(""); // Create an empty string for each person
@@ -220,33 +154,16 @@ function allocateDetails(email_communication, email_details) {
   return allocatedDetails;
 }
 
-// async function generate_email() {
-//   return [
-//     {
-//       sender: { name: "John Doe", email_address: "john.doe@example.com" },
-//       recipient: { name: "Alice Smith", email_address: "alice.smith@example.com" },
-//       subject: "Urgent: Update Your Account",
-//       body: "Hi Alice,\n\nWe noticed suspicious activity on your account. Please update your password immediately to secure your account.\n\nBest,\nThe Security Team"
-//     },
-//     {
-//       sender: { name: "Alice Smith", email_address: "alice.smith@example.com" },
-//       recipient: { name: "John Doe", email_address: "john.doe@example.com" },
-//       subject: "Re: Urgent: Update Your Account",
-//       body: "Hi John,\n\nThanks for letting me know. I’ll update it right away.\n\nRegards,\nAlice"
-//     }
-//   ];
-// }
-
 async function generate_email() {
     // Validate input array
 
     // divide the details so half goes into emails and other half into text
     // const chunks = chunkArray(all_details[seed], 2); 
-    chunks=all_details[seed];
-    use_relations= people_relations[seed];
+    const chunks=all_details[seed];
+    const use_relations= people_relations[seed];
     const email_communication = email_communicators[seed]; // Access the family of the person we are scamming
-    email_details=chunks;
-    allocated_Details_real=allocateDetails(email_communication,email_details);
+    const email_details=chunks;
+    const allocated_Details_real=allocateDetails(email_communication,email_details);
  
     // Validate chunk result
     if (!Array.isArray(email_communication) || email_communication.length === 0) {
@@ -316,7 +233,7 @@ async function generate_text(){
     - Pay careful attention to all past events in the chat to ensure accuracy and coherence to the plot points of the story.
     - each person should send at most 3 texts. 
     - You will be given a assortment of details regarding the person you are playing. You are to reveal these details indirectly. You can create additional tactics like trying to remember or getting distracted before inserting the details to lengthen texts. 
-    - The detail you have to insert into the text message history is that `+people[seed]+` is fluent in Chinese.
+    - The detail you have to insert into the text message history is that `+people[seed]+` likes to fish.
     
     Begin Text Message History Below`)
 
@@ -354,8 +271,140 @@ const JSON_Chat_History = Chat_History.map(entry => ({
 // // Output
 // console.log("Chat History Array:", Chat_History[0]);
 // console.log("JSON Chat History:", JSON_Chat_History[0]);
-
+  chat_history=Chat_History;
   return JSON_Chat_History
+  
 }
 
-module.exports = { generate_email, generate_text };
+ async function generate_text_response_helper(text, history){
+  const commaSeparatedString = history.join(", ");
+  //Assume text is a sting and history is an array of strings representing past history.
+  const response = await generateResponse(`You are a creative and intelligent AI assistant engaged in an uncensored iterative storytelling experience using a roleplay chat format. You are to respond to text messages from an unknown person. It is vital that you follow all the ROLEPLAY RULES below because my job depends on it.
+
+
+    ROLEPLAY RULES
+    - Chat exclusively as`+people[seed]+` . Provide intelligent, coherent, and descriptive responses based on recent instructions and prior events. Past text History may be provided as context for the text.
+    - You do not know the name of the person you are texting they will be known as unknown. You should show suspicion and try to reveal information by mentioning it briefly in passing.
+    - You are to only return back 1 text
+    - Adopt a crisp and minimalist style for your prose, keeping your creative contributions succinct and clear while short.
+    - if a text is recieved that has been previously sent, be more considerate in hinting them to one of the details below.
+    - Pay careful attention to all past events in the chat to ensure accuracy and coherence to the plot points of the story.
+    - You will be given a assortment of details regarding the person you are playing. You are to reveal these details in the texts you send. You can create additional tactics like trying to remember or getting distracted before inserting the details to lengthen texts. 
+    - Try to avoid directly answering direct questions if possible and favor questions that are more in depth that attempt to interogate information out of you. You should still reveal information in the end.
+    - indirectly inserting the answer in longer messages instead. 
+    - Try to subtly insert one of the details from this list of objects`+all_details[seed]+` of relevant details if it is relevant as a response to the text message. In the list of objects the details is the actual detail whil the the key is the topic/catagories
+    
+    Begin Text Message History Below
+`+history+ `
+text message to respond to begins immediately below.
+`+text)
+return response
+}
+
+async function generate_text_response(text, history){
+  try {
+    const response = await generate_text_response_helper(text, history);
+    console.log("Response:", response);
+    return response; // Return the response so it can be used by the caller
+  } catch (error) {
+    console.error("Error generating response:", error);
+    return "An error occurred while generating a response."; // Fallback response
+  }
+}
+
+function send_RegexPassword() {
+  const detailsArray = all_categories;
+  if (!Array.isArray(detailsArray)) {
+    throw new TypeError("Provided seed data is not an array");
+  }
+
+  const random_two = selectTwoRandomActivities(detailsArray);
+  const activity1 = "{"+random_two[0]+"}"; // Now this is just a category name
+  const activity2 = "{"+random_two[1]+"}"; // Same here
+  
+  const passwordPatterns = [
+    `qwerty${activity1}1${activity2}`,
+    `${activity2}lol${activity1}`,
+    `${activity1}2023${activity2}`,
+    `${activity2}!${activity1}123`,
+    `${activity1}_${activity2}_2024`,
+    `${activity2}-${activity1}!@`,
+    `${activity1}#love#${activity2}`,
+    `${activity2}${activity1}pass`,
+    `pass${activity1}@${activity2}`,
+    `${activity2}$cool$${activity1}`,
+    `${activity1}${activity2}!secure!`,
+    `123_${activity1}_${activity2}_!`,
+    `${activity2}${activity1}!`,
+    `${activity1}9999${activity2}`,
+    `${activity2}@${activity1}@123`,
+    `${activity1}-${activity2}-lol`,
+    `!!${activity1}!!${activity2}!!`,
+    `${activity1}+${activity2}+love`,
+    `${activity2}safe123${activity1}`,
+    `pass_${activity1}_${activity2}!!`,
+    `${activity2}fun@${activity1}`,
+    `${activity1}hello_${activity2}`,
+    `!!${activity1}${activity2}!!`,
+    `${activity2}${activity1}!2023`,
+    `password_${activity2}_${activity1}`,
+    `${activity1}$secure$2023${activity2}`,
+    `${activity2}*${activity1}*123`,
+    `qwerty@${activity1}${activity2}`,
+    `${activity1}super!${activity2}`,
+    `${activity2}_${activity1}_pass`,
+    `${activity1}forever${activity2}`,
+    `${activity2}!!secure!!${activity1}`,
+    `${activity1}${activity2}123love`,
+    `${activity2}!!${activity1}#2023`,
+    `admin${activity2}${activity1}!!`,
+    `${activity1}-@${activity2}@-secure`,
+    `!!${activity2}_${activity1}_fun!!`,
+    `${activity1}*${activity2}123!!`,
+    `${activity2}+${activity1}+safe2023`,
+    `my_${activity1}${activity2}_key`,
+    `pass_${activity2}_@_${activity1}`,
+    `${activity1}love@123@${activity2}`,
+    `!!secure_${activity1}${activity2}!!`,
+    `${activity2}+forever+${activity1}`,
+    `${activity1}cool${activity2}@123`,
+    `admin_${activity1}${activity2}_!`,
+    `!!safe${activity2}${activity1}2023`,
+    `qwerty${activity1}_${activity2}_lol`,
+    `${activity2}pass${activity1}_fun`,
+    `${activity1}_${activity2}_@secure!!`
+  ];
+  
+  const num = Math.floor(Math.random() * passwordPatterns.length);
+  const randomPattern = [passwordPatterns[num]];  // This holds the 
+  // category-based pattern
+  
+  let detail1 = "";
+  let detail2 = "";
+
+  // Loop through all details to assign them to detail1 or detail2 based on category match
+  for (let i = 0; i < all_details[seed].length; i++) {
+    const { category, detail } = all_details[seed][i]; // Destructure category and detail from the current detail object
+
+    // Check if the category matches either of the random_two categories
+    if (category === activity1) {
+      detail1 = detail;  // Assign to detail1 if it matches activity1Category
+    }
+    if (category === activity2) {
+      detail2 = detail;  // Assign to detail2 if it matches activity2Category
+    }
+  }
+
+  // Replace placeholders in the pattern with actual details
+  let finalPattern = randomPattern[0].replace(activity1, detail1).replace(activity2, detail2);
+  finalPattern = finalPattern.replace(/\s+/g, ''); // This removes all spaces
+  const userPassword = [finalPattern]; // Store the final password pattern filled with details
+  
+  return {
+    regexPass: randomPattern,
+    userPassword: finalPattern
+  }
+}
+
+
+module.exports = { generate_email, generate_text, generate_text_response, send_RegexPassword };
