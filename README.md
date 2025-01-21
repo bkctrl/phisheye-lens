@@ -28,7 +28,7 @@
     
    <a href="https://phisheyelens.co" target="_blank"><strong>🔗 VISIT ACTIVE WEBSITE »</strong></a>
     <br />
-    <a href="https://dorahacks.io/buidl/21693" target="_blank"><strong>🧑‍💻 DORAHACKS LINK »</strong></a>
+    <a href="https://dorahacks.io/buidl/21693" target="_blank"><strong>🧑‍💻 DORAHACKS (Devpost) LINK »</strong></a>
     <br />
 <br />
   </p>
@@ -77,6 +77,7 @@ To set up the project locally and get a local copy up and running:
 
 ### Prerequisites
 * npm
+
   ```sh
   npm install npm@latest -g
   ```
@@ -84,14 +85,17 @@ To set up the project locally and get a local copy up and running:
 ### Installation
 
 1. Clone the repository: <br />
+
    ```sh
    git clone https://github.com/bkctrl/phisheye-lens
    ```
 2. Navigate to the project directory & install the dependencies: <br />
+
    ```sh
    cd phisheyelens && npm install
    ```
 3. Install the dependencies for the backend API: <br />
+
    ```sh
    cd src/backend && npm install
    ```
@@ -99,10 +103,12 @@ To set up the project locally and get a local copy up and running:
 ### API Setup & Usage
 You could test the backend both locally or by using a deployed API. The following is on testing locally. 
 1. Navigate to `src/backend/apis/server.js` and run the server. Assuming you are at the root directory:
+
    ```sh
    cd src/backend/apis/server.js && nodemon server.js
    ```
 3. Open a new terminal and run the frontend. On the new terminal:
+
    ```sh
    npm run dev
    ```
@@ -113,12 +119,14 @@ Our API leverages Google's Gemini API! Check out how it is done:
 
 ### Implementation
 Navigate to `generate_data.js`:
+
 ```bash
 cd src/backend/apis/generate_data.js
 ```
 
 ### Endpoints
 Navigate to `server.js`:
+
 ```bash
 cd src/backend/apis/server.js
 ```
