@@ -58,6 +58,11 @@ By playing the role of the sneaky phisher, you explore a victim's device and exa
   </tbody>
 </table>
 
+## Screenshots
+![uofthacks-screenshots](https://github.com/user-attachments/assets/9e3451cb-4939-4718-8836-c143d842ad08)
+
+
+
 ## Key Features
 
 - Interactive chat simulation with AI-generated responses
