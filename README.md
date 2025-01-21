@@ -118,7 +118,13 @@ You could test the backend both locally or by using a deployed API. The followin
 ## API Implementation & Endpoints
 Our API leverages Google's Gemini API! Check out how it is done:
 
-## How It Works 
+### Implementation
+Navigate to `generate_data.js`:
+
+```bash
+cd src/backend/apis/generate_data.js
+```
+
 The process of setting up the game contents for each round can be broadly seperated into 2 groups: creating fictional details and then generating passwords. Careful thought was put in for both processes to make a challenging but finishable game that reflects the dynamicism of password cracking. 
 
 **Creating Fictional Details**  
@@ -167,12 +173,6 @@ To generate passwords a regex-like system was developed using inspiration from c
 
 The player is given the generalized form of the regex that has been filled in with categories to assist them with cracking the password while the real password is stored with filled in values. The choice was taken to design a password independently of the AI model by black boxing the the password generation from the model. This means the model has no context to the password that is stored which prevents leaks of the password in the text feature and incentivizes fairness in all the details being given to the player while increasing the challenge of cracking the password.
 
-### Implementation
-Navigate to `generate_data.js`:
-
-```bash
-cd src/backend/apis/generate_data.js
-```
 
 ### Endpoints
 Navigate to `server.js`:
