@@ -2,3 +2,5 @@
 /api
 /api/*
 /node_modules
+*.env
+.env*.local
