@@ -124,24 +124,33 @@ cd src/backend/apis/server.js
 ```
 
 Our API serves the following endpoints:
+
 #### /communications
 
 This is where the emails and chat history genearted with Gemini in `generate_data.js` can be fetched.
 
 ![Screenshot 2025-01-21 at 2 50 56 AM](https://github.com/user-attachments/assets/65f0acde-340d-413b-ab47-eec697b2441b)
 
+
 #### /guess
 
-This is where the user's guess is posted and compared with the correct password.
+This is where the user's guess is posted and compared with the correct password. It also includes the correct password for easier debugging.
+
+![Screenshot 2025-01-21 at 2 53 16 AM](https://github.com/user-attachments/assets/aa5fbfc6-dce8-48e3-b9d3-755713a2b8df)
 
 
 #### /new-game
 
 This is run when a new game is started, re-generating emails, chat histories, regexes, profiles, and passwords.
 
+![Screenshot 2025-01-21 at 2 54 57 AM](https://github.com/user-attachments/assets/a04c87e3-1090-4c92-b2f8-b1b5c4404f4c)
+
+
 #### /chat
 
 This is where the user's interactions with the chatbot is posted. The user's input is posted to our backend, which in turns returns a Gemini-generated answer.
+
+![Screenshot 2025-01-21 at 2 55 54 AM](https://github.com/user-attachments/assets/f4b29888-05eb-44cf-b8c0-cdc02c59066f)
 
 
 
