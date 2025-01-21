@@ -129,7 +129,8 @@ Our API serves the following endpoints:
 
 This is where the emails and chat history genearted with Gemini in `generate_data.js` can be fetched.
 
-![Screenshot 2025-01-21 at 2 50 56 AM](https://github.com/user-attachments/assets/65f0acde-340d-413b-ab47-eec697b2441b)
+![Screenshot 2025-01-21 at 2 58 07 AM](https://github.com/user-attachments/assets/e8ce44d8-dcc5-438f-85db-7ac15e474d3f)
+
 
 
 #### /guess
