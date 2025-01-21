@@ -108,6 +108,42 @@ You could test the backend both locally or by using a deployed API. The followin
    ```
 4. Navigate to `localhost:3000` on your browser and see the project demo!
 
+## API Implementation & Endpoints
+Our API leverages Google's Gemini API! Check out how it is done:
+
+### Implementation
+Navigate to `generate_data.js`:
+```bash
+cd src/backend/apis/generate_data.js
+```
+
+### Endpoints
+Navigate to `server.js`:
+```bash
+cd src/backend/apis/server.js
+```
+
+Our API serves the following endpoints:
+#### /communications
+
+This is where the emails and chat history genearted with Gemini in `generate_data.js` can be fetched.
+
+![Screenshot 2025-01-21 at 2 50 56 AM](https://github.com/user-attachments/assets/65f0acde-340d-413b-ab47-eec697b2441b)
+
+#### /guess
+
+This is where the user's guess is posted and compared with the correct password.
+
+
+#### /new-game
+
+This is run when a new game is started, re-generating emails, chat histories, regexes, profiles, and passwords.
+
+#### /chat
+
+This is where the user's interactions with the chatbot is posted. The user's input is posted to our backend, which in turns returns a Gemini-generated answer.
+
+
 
 ## How to Play
 
