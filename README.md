@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 
 <div align="center" id="readme-top">
-  <a href="https://github.com/bkctrl/uwmun">
+  <a href="https://github.com/bkctrl/phisheye-lens">
     <br /><br />
     <img src="https://github.com/user-attachments/assets/e7f2d76e-5657-49d7-97db-39a74956692e" alt="Logo" width="120" height="120" style="border-radius: 50%;">
   </a>
