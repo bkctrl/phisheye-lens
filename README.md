@@ -211,6 +211,22 @@ This is where the user's interactions with the chatbot is posted. The user's inp
 
 ![Screenshot 2025-01-21 at 2 55 54 AM](https://github.com/user-attachments/assets/f4b29888-05eb-44cf-b8c0-cdc02c59066f)
 
+## Frontend
+
+The frontend is built with Next.js and Tailwind CSS. The main components include:
+
+Landing Page:
+- Simple landing page with Typewriter effect
+- Uses `react-typewriter-effect` library
+- Explains game concept and instructions
+
+Game Page:
+- Phone interface using `react-device-mockup` library
+- Contains home screen, chat interface, email interface, and RBC interface
+- Draggable notepad for taking notes about clues and details
+- Draggable instructions card showing password regex pattern
+
+When the correct password is guessed, the user sees a confetti animation using `react-confetti` library and is redirected to the RBC dashboard.
 
 
 ## How to Play
